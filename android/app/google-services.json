@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855746212080",
+    "project_id": "sandugo-7d1ee",
+    "storage_bucket": "sandugo-7d1ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855746212080:android:d0253fe26949ef102f5235",
+        "android_client_info": {
+          "package_name": "com.project.sandugo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA1JizjQgyxnDWBqlW3L-WWPJ0bwwr8HQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
