@@ -1,123 +1,183 @@
 [
-    {
-      "name": "City Hospital",
-      "latitude": 40.7128,
-      "longitude": -74.0060,
-      "phone": "+1-555-1234"
-    },
-    {
-      "name": "Green Valley Medical",
-      "latitude": 34.0522,
-      "longitude": -118.2437,
-      "phone": "+1-555-5678"
-    },
-    {
-      "name": "Sunnydale Hospital",
-      "latitude": 36.7783,
-      "longitude": -119.4179,
-      "phone": "+1-555-2345"
-    },
-    {
-      "name": "Mountain View Medical Center",
-      "latitude": 37.7749,
-      "longitude": -122.4194,
-      "phone": "+1-555-6789"
-    },
-    {
-      "name": "Lakeside Health Clinic",
-      "latitude": 40.7608,
-      "longitude": -111.8910,
-      "phone": "+1-555-9876"
-    },
-    {
-      "name": "Riverbend General Hospital",
-      "latitude": 41.8781,
-      "longitude": -87.6298,
-      "phone": "+1-555-5432"
-    },
-    {
-      "name": "Maplewood Medical Center",
-      "latitude": 39.7392,
-      "longitude": -104.9903,
-      "phone": "+1-555-8765"
-    },
-    {
-      "name": "Oakland Medical Center",
-      "latitude": 37.8044,
-      "longitude": -122.2711,
-      "phone": "+1-555-3456"
-    },
-    {
-      "name": "Silver Creek Hospital",
-      "latitude": 42.3601,
-      "longitude": -71.0589,
-      "phone": "+1-555-4321"
-    },
-    {
-      "name": "Westwood Health Clinic",
-      "latitude": 33.8688,
-      "longitude": -118.2208,
-      "phone": "+1-555-6543"
-    },
-    {
-      "name": "Highland Park General",
-      "latitude": 43.0731,
-      "longitude": -89.4012,
-      "phone": "+1-555-7654"
-    },
-    {
-      "name": "Pine Valley Medical Center",
-      "latitude": 44.0521,
-      "longitude": -123.0867,
-      "phone": "+1-555-8764"
-    },
-    {
-      "name": "Willowbrook Health Services",
-      "latitude": 36.1627,
-      "longitude": -86.7816,
-      "phone": "+1-555-2109"
-    },
-    {
-      "name": "Cedarwood Hospital",
-      "latitude": 38.9072,
-      "longitude": -77.0369,
-      "phone": "+1-555-3210"
-    },
-    {
-      "name": "Eastside Medical Center",
-      "latitude": 32.7767,
-      "longitude": -96.7970,
-      "phone": "+1-555-4322"
-    },
-    {
-      "name": "Seaside General Hospital",
-      "latitude": 36.5780,
-      "longitude": -122.0270,
-      "phone": "+1-555-3457"
-    },
-    {
-      "name": "Parkland Health Center",
-      "latitude": 35.1495,
-      "longitude": -90.0490,
-      "phone": "+1-555-6547"
-    },
-    {
-      "name": "Northwood Medical Clinic",
-      "latitude": 40.7484,
-      "longitude": -73.9857,
-      "phone": "+1-555-1235"
-    },
-    {
-      "name": "Sunnybrook Hospital",
-      "latitude": 34.0522,
-      "longitude": -118.2437,
-      "phone": "+1-555-1357"
-    },
-    {
-      "name": "Sunset General Medical Center",
-      "latitude": 38.8954,
-      "longitude": -77.0365,
-      "phone": "+1-555-2468"
-    }
-  ]
-  
+  {
+    "name": "Rep. Pedro Trono Memorial District Hospital",
+    "type": "blood bank",
+    "latitude": 10.661768,
+    "longitude": 122.323537,
+    "phone": "(033) 315 5172",
+    "bloodtype": ["O+","O-"],
+    "bloodcomponent": ["whole blood", "red cells", "platelets"]
+  },
+  {
+    "name": "San Joaquin Mother and Child Hospital",
+    "type": "blood drive",
+    "latitude": 10.590153,
+    "longitude": 122.128285,
+    "phone": "(033) 314 7499",
+    "bloodtype": ["A+", "A-", "B+", "B-", "O+", "O-"],
+    "bloodcomponent": ["whole blood", "red cells"]
+  },
+  {
+    "name": "Western Visayas Medical Center",
+    "type": "blood center",
+    "latitude": 10.71876,
+    "longitude": 122.5418,
+    "phone": "(02) 8942 6843",
+    "bloodtype": ["A+", "A-", "B+", "B-", "O+","O-", "AB+", "AB-"],
+    "bloodcomponent": ["whole blood", "red cells", "platelets", "plasma"]
+  },
+  {
+    "name": "West Visayas State University Medical Center",
+    "type": "blood bank",
+    "latitude": 10.7159,
+    "longitude": 122.561,
+    "phone": "(033) 320 2431",
+    "bloodtype": ["A+", "B+", "O+", "O-"],
+    "bloodcomponent": ["whole blood", "red cells"]
+  },
+  {
+    "name": "St. Paul's Hospital of Iloilo, Inc.",
+    "type":"blood drive",
+    "latitude": 10.701971,
+    "longitude": 122.567024,
+    "phone": "(033) 337 2742",
+    "bloodtype": ["A-", "B-", "O+", "O-", "AB+"],
+
+    "bloodcomponent": ["whole blood", "red cells", "platelets", "plasma"]
+  },
+  {
+    "name": "The Medical City Iloilo",
+    "type": "blood center",
+    "latitude": 10.6991081,
+    "longitude": 122.5431819,
+    "phone": "3397340",
+    "bloodtype": ["A+", "B-", "O+", "AB-"],
+    "bloodcomponent": ["whole blood", "red cells", "platelets", "plasma"]
+  },
+  {
+    "name": "Medicus Medical Center",
+    "type": "blood bank",
+    "latitude": 10.702714,
+    "longitude": 122.552233,
+    "phone": "(033) 328 7777",
+    "bloodtype": ["A+", "B+", "B-", "O+"],
+    "bloodcomponent": ["whole blood", "red cells", "platelets"]
+  },
+  {
+    "name": "Iloilo Doctors' Hospital, Inc.",
+    "type": "blood center",
+    "latitude": 10.697203,
+    "longitude": 122.554268,
+    "phone": "(033) 337 8646",
+    "bloodtype": ["O+", "O-", "AB+", "AB-"],
+    "bloodcomponent": ["whole blood", "platelets"]
+  },
+  {
+    "name": "Iloilo Mission Hospital",
+    "type": "blood drive",
+    "latitude": 10.71423,
+    "longitude": 122.56019,
+    "phone": "(033) 320 0315",
+    "bloodtype": ["A+", "A-", "B+", "AB+", "AB-"],
+    "bloodcomponent": ["whole blood", "red cells"]
+  },
+  {
+    "name": "Healthway QualiMed Hospital Iloilo",
+    "type": "blood bank",
+    "latitude": 10.706363,
+    "longitude": 122.547855,
+    "phone": "0917 466 2273",
+    "bloodtype": ["A-", "B-", "O+", "AB+"],
+    "bloodcomponent": ["whole blood", "platelets", "plasma"]
+  },
+  {
+    "name": "Miagao Medical Hospital",
+    "type": "blood drive",
+    "latitude": 10.664885,
+    "longitude": 122.22463,
+    "phone": "(033) 234 5678",
+    "bloodtype": ["A+", "A-", "B+", "B-", "O+","O-", "AB+", "AB-"],
+    "bloodcomponent": ["whole blood", "red cells"]
+  },
+  {
+    "name": "Padre Palermo Memorial District Hospital",
+    "type": "blood center",
+    "latitude": 10.660469,
+    "longitude": 122.278645,
+    "phone": "(033) 789 0123",
+    "bloodtype": ["A+", "A-", "B+", "O-"],
+    "bloodcomponent": ["whole blood", "red cells"]
+  },
+  {
+    "name": "Medicare General Hospital",
+    "type": "blood bank",
+    "latitude": 10.67288,
+    "longitude": 122.388061,
+    "phone": "(033) 890 1234",
+    "bloodtype": ["A+", "O+", "AB+", "AB-"],
+    "bloodcomponent": ["whole blood", "red cells", "plasma"]
+  },
+  {
+    "name": "Kilid Baybay Hospital",
+    "type": "blood drive",
+    "latitude": 10.668866,
+    "longitude": 122.334294,
+    "phone": "(033) 901 2345",
+    "bloodtype": ["A+", "A-", "B+", "B-"],
+    "bloodcomponent": ["whole blood, platelets"]
+  },
+  {
+    "name": "Riverside Medical Center",
+    "type": "blood center",
+    "latitude": 10.638523,
+    "longitude": 122.241313,
+    "phone": "(033) 012 3456",
+    "bloodtype": ["A+", "A-", "O+", "O-"],
+    "bloodcomponent": ["red cells", "platelets"]
+  },
+  {
+    "name": "Dr. Jullene Rae Hospital",
+    "type": "blood bank",
+    "latitude": 10.734810,
+    "longitude": 121.952428,
+    "phone": "(033) 123 4567",
+    "bloodtype": ["B+", "B-", "O+", "O-"],
+    "bloodcomponent": ["whole blood", "red cells"]
+  },
+  {
+    "name": "Pagbutlak Hospital",
+    "type": "blood drive",
+    "latitude": 10.611846,
+    "longitude": 122.166863,
+    "phone": "(033) 789 0123",
+    "bloodtype": ["A+", "B-"],
+    "bloodcomponent": ["red cells", "platelets"]
+  },
+  {
+    "name": "Punta Bato Medical Hospital",
+    "type": "blood center",
+    "latitude": 10.416073,
+    "longitude":  121.965255,
+    "phone": "(+63) 967 890 1234",
+    "bloodtype": ["A-", "AB+", "AB-"],
+    "bloodcomponent": ["red cells", "platelets"]
+  },
+  {
+    "name": "O'layra Medical Center",
+    "type": "blood bank",
+    "latitude": 10.750022,
+    "longitude": 121.943814,
+    "phone": "(+63) 945 678 9012",
+    "bloodtype": ["A+", "B-", "O+", "AB-"],
+    "bloodcomponent": ["plasma"]
+  },
+  {
+    "name": "Okra Green Memorial Hospital",
+    "type": "blood drive",
+    "latitude": 10.582548,
+    "longitude": 122.103329,
+    "phone": "(033) 456 7890",
+    "bloodtype": ["A+", "A-", "B+", "B-"],
+    "bloodcomponent": ["whole blood"]
+  }
+]
