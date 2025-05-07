@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sandugo/HomePage.dart';
+import 'package:sandugo/NearestFacilities.dart';
 import 'package:sandugo/main.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -12,11 +14,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
 
   List<Widget> widgetOptions = <Widget> [
-    HomePage(),
-    Text("Explore"),
+    FacilitiesPage(),
     Text("Saved Places"),
-    //Text('Account'),
-    Text("Information")//For now cuz Empty pa ung account page
+    Text("Information"),//For now cuz Empty pa ung account page
+    Homepage(), //Home Page
    ];
 
   //Function to select on List
@@ -29,6 +30,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
     Widget build(BuildContext context) {
       return Scaffold(
+        appBar: AppBar(
+          title: const Text("SanDUGO"),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          leading: IconButton(
+            icon: const Icon(Icons.home),
+            tooltip: "Go Home",
+            onPressed: () {
+              Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => Homepage()),
+              );
+            },
+          ),
+        ),
         body: Center(
         child: widgetOptions.elementAt(_currentIndex),
         ),
@@ -40,16 +54,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
 
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromRGBO(238, 233, 255, 100),
+          backgroundColor: Color(Colors.white.value),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.pin_drop_outlined),
               activeIcon: Icon(Icons.pin_drop_sharp),
-              label: "Explore",
+              label: "Find Blood",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.flag_outlined),
-              activeIcon: Icon(Icons.flag_circle_sharp),
+              icon: Icon(Icons.bookmark_outlined),
+              activeIcon: Icon(Icons.bookmark_add_sharp),
               label: "Saved Places",
             ),
             BottomNavigationBarItem(
