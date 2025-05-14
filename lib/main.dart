@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:sandugo/HomePage.dart';
 import 'package:sandugo/NearestFacilities.dart';
 import 'package:sandugo/navbar.dart';
 import 'dart:convert';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FacilitiesPage(),
+      home: Homepage(),
     );
   }
 }
