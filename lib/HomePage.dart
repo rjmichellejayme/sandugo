@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sandugo/navbar.dart';
 import 'FindBloodPage.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  final VoidCallback? onFindBloodTap;
+  final VoidCallback? onNearestFacilitiesTap;
+  final VoidCallback? onInformationPageTap;
+  const Homepage({super.key, 
+                this.onFindBloodTap, 
+                this.onNearestFacilitiesTap, 
+                this.onInformationPageTap});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -13,41 +20,24 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFBEAEA),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Home',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-            fontSize: 24,
-          ),
-        ),
-      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24.0, 
+          vertical: 16),
         child: Column(
           children: [
             _buildHomeButton(
               color: const Color(0xFFFFCDD2),
               icon: Icons.opacity,
               text: 'FIND BLOOD',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FindBloodPage()),
-                );
-              },
+              onTap: widget.onFindBloodTap ?? (){},
             ),
             const SizedBox(height: 16),
             _buildHomeButton(
               color: const Color(0xFFF48FB1),
               icon: Icons.local_hospital,
-              text: 'NEAREST FACILITIES',
-              onTap: () {
+              text: 'NEAREST FACILITIES' ,
+              onTap: widget.onNearestFacilitiesTap ?? () {
                 // Navigate to Nearest Facilities Page
               },
             ),
@@ -56,7 +46,7 @@ class _HomepageState extends State<Homepage> {
               color: const Color(0xFFE57373),
               icon: Icons.help_outline,
               text: 'INFORMATION PAGE',
-              onTap: () {
+              onTap: widget.onInformationPageTap ?? () {
                 // Navigate to Information Page
               },
             ),
