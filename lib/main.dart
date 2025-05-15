@@ -7,6 +7,7 @@ import 'package:sandugo/NearestFacilities.dart';
 import 'package:sandugo/navbar.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sandugo/splash_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BottomNavBar(),
+      home: SplashScreen(), 
+      debugShowCheckedModeBanner: false,
     );
   }
 }
