@@ -78,7 +78,6 @@ class _FacilitiesPage extends State<FacilitiesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SanDUGO Home'),
         actions: [
           IconButton(
             icon: Icon(Icons.map),

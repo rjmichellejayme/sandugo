@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandugo/FindBloodPage.dart';
 import 'package:sandugo/HomePage.dart';
 import 'package:sandugo/NearestFacilities.dart';
 import 'package:sandugo/main.dart';
@@ -12,39 +13,102 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
+   bool _isFirstLoad = true;
+   bool _showNearestFacilities= false;
+  
 
   List<Widget> widgetOptions = <Widget>[
-    FacilitiesPage(),
+    FindBloodPage(),
     Text("Saved Places"),
-    Text("Information"), //For now cuz Empty pa ung account page
-    Homepage(), //Home Page
+    Text("Information"),
+  ];
+
+  final List<String> pageTitles = [
+    "Filters",
+    "Saved Places",
+    "FAQs",
   ];
 
   //Function to select on List
   void _onItemTap(int index) {
     setState(() {
       _currentIndex = index;
+      _isFirstLoad = false;
+      _showNearestFacilities = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    //Determine Which Page to load
+    Widget bodyContent;
+    if (_showNearestFacilities) {
+      bodyContent = FacilitiesPage();
+    } else if (_isFirstLoad) {
+      bodyContent = Homepage(
+        onFindBloodTap: () {
+          setState(() {
+            _currentIndex = 0; // FindBloodPage
+            _isFirstLoad = false;
+          });
+        },
+        onNearestFacilitiesTap: () {
+          setState(() {
+            _showNearestFacilities = true;
+          });
+        },
+        onInformationPageTap: () {
+          setState(() {
+            _currentIndex = 2; // Information
+            _isFirstLoad = false;
+          });
+        },
+      );
+    } else {
+      bodyContent = widgetOptions.elementAt(_currentIndex);
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SanDUGO"),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        leading: IconButton(
-          icon: const Icon(Icons.home),
-          tooltip: "Go Home",
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => Homepage()),
-            );
-          },
+        backgroundColor: const Color(0xFFFBEAEA),
+        elevation: 0,
+        centerTitle: true,
+        // Changing Page Titles depending on the pages
+        title: Text(
+          _showNearestFacilities
+          ? "Nearest Facilities" 
+          : _isFirstLoad 
+            ? "Home" 
+            : pageTitles[_currentIndex],
+
+            style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+            fontSize: 24,
+          ),
+          textAlign: TextAlign.center,
+        
         ),
+        //Back Button only if not on Home
+        leading: (_isFirstLoad && !_showNearestFacilities) 
+          ? null 
+          : IconButton(
+              icon: const Icon(Icons.arrow_back),
+              tooltip: "Home",
+              onPressed: () {
+                setState(() {
+                if (_showNearestFacilities) {
+                  _showNearestFacilities = false;
+                  _isFirstLoad = true;
+                } else {
+                  _isFirstLoad = true;
+                }
+                });
+              },
+            ),
       ),
       body: Center(
-        child: widgetOptions.elementAt(_currentIndex),
+        child: bodyContent,
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.call),
@@ -54,12 +118,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.red,
         backgroundColor: Color(Colors.white.value),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.pin_drop_outlined),
             activeIcon: Icon(Icons.pin_drop_sharp),
             label: "Find Blood",
+            
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmark_outlined),
@@ -69,7 +135,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.question_mark_outlined),
             activeIcon: Icon(Icons.question_mark_sharp),
-            label: "Information",
+            label: "FAQs",
           ),
         ],
         currentIndex: _currentIndex,

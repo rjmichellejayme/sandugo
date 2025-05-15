@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'hospital_data.dart;
+import 'hospital_data.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HospitalResultsModal extends StatelessWidget {
