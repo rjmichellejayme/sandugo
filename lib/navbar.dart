@@ -3,6 +3,7 @@ import 'package:sandugo/FindBloodPage.dart';
 import 'package:sandugo/HomePage.dart';
 import 'package:sandugo/NearestFacilities.dart';
 import 'package:sandugo/main.dart';
+import 'package:sandugo/InformationPage.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -20,7 +21,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   List<Widget> widgetOptions = <Widget>[
     FindBloodPage(),
     Text("Saved Places"),
-    Text("Information"),
+    InformationPage(), // <-- Use your actual InformationPage here
   ];
 
   final List<String> pageTitles = [
