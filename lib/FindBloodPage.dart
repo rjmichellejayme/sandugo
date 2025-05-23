@@ -7,35 +7,37 @@ import 'package:latlong2/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'SavedPlacesPage.dart';
 import 'InformationPage.dart';
+import 'HospitalDetailsPage.dart';
+import 'hospital_data.dart';
 
-class Hospital {
-  final String name;
-  final String type;
-  final LatLng location;
-  final String phone;
-  final List<String> bloodTypes;
-  final List<String> bloodComponents;
+// class Hospital {
+//   final String name;
+//   final String type;
+//   final LatLng location;
+//   final String phone;
+//   final List<String> bloodTypes;
+//   final List<String> bloodComponents;
 
-  Hospital({
-    required this.name,
-    required this.type,
-    required this.location,
-    required this.phone,
-    required this.bloodTypes,
-    required this.bloodComponents,
-  });
+//   Hospital({
+//     required this.name,
+//     required this.type,
+//     required this.location,
+//     required this.phone,
+//     required this.bloodTypes,
+//     required this.bloodComponents,
+//   });
 
-  factory Hospital.fromJson(Map<String, dynamic> json) {
-    return Hospital(
-      name: json['name'],
-      type: json['type'],
-      location: LatLng(json['latitude'], json['longitude']),
-      phone: json['phone'],
-      bloodTypes: List<String>.from(json['bloodtype']),
-      bloodComponents: List<String>.from(json['bloodcomponent']),
-    );
-  }
-}
+//   factory Hospital.fromJson(Map<String, dynamic> json) {
+//     return Hospital(
+//       name: json['name'],
+//       type: json['type'],
+//       location: LatLng(json['latitude'], json['longitude']),
+//       phone: json['phone'],
+//       bloodTypes: List<String>.from(json['bloodtype']),
+//       bloodComponents: List<String>.from(json['bloodcomponent']),
+//     );
+//   }
+// }
 
 class FindBloodPage extends StatefulWidget {
   const FindBloodPage({super.key});
@@ -154,10 +156,8 @@ class FilteredHospitalsPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(
-                                  Icons.bookmark_border,
-                                  color: Colors.red,
-                                ),
+                                icon: Icon(Icons.bookmark_border,
+                                    color: Colors.red),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -181,6 +181,15 @@ class FilteredHospitalsPage extends StatelessWidget {
                               ),
                             ],
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HospitalDetailsPage(hospital: hospital),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
