@@ -5,6 +5,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'SavedPlacesPage.dart';
+import 'InformationPage.dart';
 
 class Hospital {
   final String name;
@@ -66,8 +68,7 @@ class FilteredHospitalsPage extends StatelessWidget {
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                    'https://.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: 'https://.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: const ['a', 'b', 'c'],
               ),
               MarkerLayer(
@@ -158,14 +159,24 @@ class FilteredHospitalsPage extends StatelessWidget {
                                   color: Colors.red,
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/saved-places');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SavedPlacesPage()),
+                                  );
                                 },
                               ),
                               IconButton(
                                 icon: const Icon(Icons.info_outline,
                                     color: Colors.red),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/information');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            InformationPage()),
+                                  );
                                 },
                               ),
                             ],
@@ -533,12 +544,15 @@ class _FindBloodPageState extends State<FindBloodPage> {
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
               value: selectedBloodType,
               onChanged: (value) => setState(() => selectedBloodType = value),
               items: bloodTypes.map((type) {
-                return DropdownMenuItem(value: type, child: Text(type == 'All' ? 'All' : 'Blood Type $type'));
+                return DropdownMenuItem(
+                    value: type,
+                    child: Text(type == 'All' ? 'All' : 'Blood Type $type'));
               }).toList(),
             ),
           ),
@@ -570,12 +584,14 @@ class _FindBloodPageState extends State<FindBloodPage> {
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
               value: selectedComponent,
               onChanged: (value) => setState(() => selectedComponent = value),
               items: bloodComponents.map((component) {
-                return DropdownMenuItem(value: component, child: Text(component));
+                return DropdownMenuItem(
+                    value: component, child: Text(component));
               }).toList(),
             ),
           ),
@@ -656,6 +672,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
             ],
           ),
         ],
-      ),    );
+      ),
+    );
   }
 }

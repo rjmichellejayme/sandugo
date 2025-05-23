@@ -94,22 +94,27 @@ class _SavedPlacesPageState extends State<SavedPlacesPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.bookmark, color: Colors.red),
+                                    icon: const Icon(Icons.bookmark,
+                                        color: Colors.red),
                                     onPressed: () {
                                       // TODO: Implement remove from saved places
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.info_outline, color: Colors.red),
+                                    icon: const Icon(Icons.info_outline,
+                                        color: Colors.red),
                                     onPressed: () {
-                                      Navigator.pushNamed(context, '/information');
+                                      Navigator.pushNamed(
+                                          context, '/information');
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                    icon: const Icon(Icons.delete_outline,
+                                        color: Colors.red),
                                     onPressed: () {
                                       // TODO: Implement remove from saved places
                                     },
@@ -124,7 +129,7 @@ class _SavedPlacesPageState extends State<SavedPlacesPage> {
                   ),
           ),
         ],
-     ),
+      ),
     );
   }
 }
