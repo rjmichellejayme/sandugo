@@ -74,7 +74,7 @@ flutter:
 
   assets:
     - assets/hospitals.json
-    - assets/app_icon/loader.gif
+    - assets/app_icon/loader2.gif
     - assets/onboarding.png
 
   # To add assets to your application, add an assets section, like this:
