@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'hospital_data.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SavedPlacesPage extends StatefulWidget {
   const SavedPlacesPage({super.key});

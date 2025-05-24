@@ -7,11 +7,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FacilitiesPage extends StatefulWidget {
+  const FacilitiesPage({Key? key}) : super(key: key);
+
   @override
-  _FacilitiesPage createState() => _FacilitiesPage();
+  FacilitiesPageState createState() => FacilitiesPageState();
 }
 
-class _FacilitiesPage extends State<FacilitiesPage> {
+class FacilitiesPageState extends State<FacilitiesPage> {
   List<dynamic> hospitals = [];
   bool locationPermissionGranted = false;
 
@@ -24,7 +26,7 @@ class _FacilitiesPage extends State<FacilitiesPage> {
         hospitals = data;
       });
     }).catchError((error) {
-      print('Error loading hospitals: $error');
+      debugPrint('Error loading hospitals: $error');
     });
   }
 
@@ -35,7 +37,7 @@ class _FacilitiesPage extends State<FacilitiesPage> {
         locationPermissionGranted = true;
       });
     } else {
-      print('Location permission denied');
+      debugPrint('Location permission denied');
     }
   }
 
@@ -60,7 +62,7 @@ class _FacilitiesPage extends State<FacilitiesPage> {
       }
       return nearbyHospitals;
     } catch (e) {
-      print('Error loading hospital data: $e');
+      debugPrint('Error loading hospital data: $e');
       return [];
     }
   }
@@ -68,7 +70,7 @@ class _FacilitiesPage extends State<FacilitiesPage> {
   void _showTooltip(BuildContext context, String message) {
     final tooltip = Tooltip(
       message: message,
-      child: Icon(Icons.info_outline),
+      child: const Icon(Icons.info_outline),
     );
     final dynamic tooltipState = tooltip.createState();
     tooltipState.ensureTooltipVisible();
@@ -80,14 +82,14 @@ class _FacilitiesPage extends State<FacilitiesPage> {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Icon(Icons.map),
+            icon: const Icon(Icons.map),
             onPressed: () {
               // Navigate to map page
             },
             tooltip: 'Quick Map Access',
           ),
           IconButton(
-            icon: Icon(Icons.info_outline),
+            icon: const Icon(Icons.info_outline),
             onPressed: () {
               _showTooltip(context,
                   'How to use the app: \n1. Allow location access.\n2. Use the map to find hospitals.\n3. Tap on a hospital to call.');
@@ -98,11 +100,11 @@ class _FacilitiesPage extends State<FacilitiesPage> {
       body: Column(
         children: [
           if (!locationPermissionGranted)
-            Center(
+            const Center(
                 child: Text(
                     'Location permission is required to find nearby hospitals.')),
           if (hospitals.isEmpty)
-            Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator())
           else
             Expanded(
               child: ListView.builder(
@@ -113,10 +115,11 @@ class _FacilitiesPage extends State<FacilitiesPage> {
                     subtitle: Text('Phone: ${hospitals[index]['phone']}'),
                     onTap: () async {
                       String url = 'tel:${hospitals[index]['phone']}';
-                      if (await canLaunch(url)) {
-                        await launch(url);
+                      final uri = Uri.parse(url);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri);
                       } else {
-                        print('Could not launch $url');
+                        debugPrint('Could not launch $url');
                       }
                     },
                   );
@@ -129,14 +132,15 @@ class _FacilitiesPage extends State<FacilitiesPage> {
               if (hospitals.isNotEmpty) {
                 String url =
                     'tel:${hospitals[0]['phone']}'; // Example: call the first hospital
-                if (await canLaunch(url)) {
-                  await launch(url);
+                final uri = Uri.parse(url);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri);
                 } else {
-                  print('Could not launch $url');
+                  debugPrint('Could not launch $url');
                 }
               }
             },
-            child: Text('Emergency Call'),
+            child: const Text('Emergency Call'),
           ),
         ],
       ),

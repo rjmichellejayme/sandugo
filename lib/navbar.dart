@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sandugo/FindBloodPage.dart';
-import 'package:sandugo/HomePage.dart';
-import 'package:sandugo/NearestFacilities.dart';
-import 'package:sandugo/main.dart';
-import 'package:sandugo/InformationPage.dart';
-import 'package:sandugo/SavedPlacesPage.dart';
+import 'package:sandugo/find_blood_page.dart';
+import 'package:sandugo/home_page.dart';
+import 'package:sandugo/nearest_facilities.dart';
+import 'package:sandugo/information_page.dart';
+import 'package:sandugo/saved_places_page.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -20,9 +19,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   
 
   List<Widget> widgetOptions = <Widget>[
-    FindBloodPage(),
-    SavedPlacesPage(),
-    InformationPage(),
+    const FindBloodPage(),
+    const SavedPlacesPage(),
+    const InformationPage(),
   ];
 
   final List<String> pageTitles = [
@@ -45,7 +44,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     //Determine Which Page to load
     Widget bodyContent;
     if (_showNearestFacilities) {
-      bodyContent = FacilitiesPage();
+      bodyContent = const FacilitiesPage();
     } else if (_isFirstLoad) {
       bodyContent = Homepage(
         onFindBloodTap: () {
@@ -78,33 +77,31 @@ class _BottomNavBarState extends State<BottomNavBar> {
         // Changing Page Titles depending on the pages
         title: Text(
           _showNearestFacilities
-          ? "Nearest Facilities" 
-          : _isFirstLoad 
-            ? "Home" 
-            : pageTitles[_currentIndex],
-
-            style: TextStyle(
+              ? "Nearest Facilities"
+              : _isFirstLoad
+                  ? "Home"
+                  : pageTitles[_currentIndex],
+          style: const TextStyle( // Add const here
             fontWeight: FontWeight.bold,
             color: Colors.red,
             fontSize: 24,
           ),
           textAlign: TextAlign.center,
-        
         ),
         //Back Button only if not on Home
         leading: (_isFirstLoad && !_showNearestFacilities) 
           ? null 
           : IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back), // <-- Add const here
               tooltip: "Home",
               onPressed: () {
                 setState(() {
-                if (_showNearestFacilities) {
-                  _showNearestFacilities = false;
-                  _isFirstLoad = true;
-                } else {
-                  _isFirstLoad = true;
-                }
+                  if (_showNearestFacilities) {
+                    _showNearestFacilities = false;
+                    _isFirstLoad = true;
+                  } else {
+                    _isFirstLoad = true;
+                  }
                 });
               },
             ),
@@ -113,15 +110,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
         child: bodyContent,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.call),
+        child: const Icon(Icons.call),
         onPressed: () {
-          //Should redirect to Add Routine/Task
-          print("Emergency Call");
+          // Should redirect to Add Routine/Task
+          debugPrint("Emergency Call");
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.red,
-        backgroundColor: Color(Colors.white.value),
+        backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.pin_drop_outlined),

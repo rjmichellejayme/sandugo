@@ -1,52 +1,53 @@
 import 'package:flutter/material.dart';
-import 'navbar.dart';  // Ensure this is correctly implemented or imported
 
 class InformationPage extends StatelessWidget {
-  static const List<_InfoCardData> infoCards = [
-    _InfoCardData(
+  static const List<InfoCardData> infoCards = [
+    InfoCardData(
       title: 'Donation Benefits',
       icon: Icons.volunteer_activism,
-      info: 'Donating blood helps save lives, stimulates blood cell production, and can reduce the risk of certain diseases.'
+      info: 'Donating blood helps save lives, stimulates blood cell production, and can reduce the risk of certain diseases.',
     ),
-    _InfoCardData(
+    InfoCardData(
       title: 'How to Request Blood',
       icon: Icons.shopping_bag,
-      info: 'To request blood, contact your local blood bank or hospital, provide necessary documentation, and fill out a request form.'
+      info: 'To request blood, contact your local blood bank or hospital, provide necessary documentation, and fill out a request form.',
     ),
-    _InfoCardData(
+    InfoCardData(
       title: 'Blood Requests & Compatibility',
       icon: Icons.bloodtype,
-      info: 'Blood type compatibility is crucial for safe transfusions. Always check compatibility charts or consult medical staff.'
+      info: 'Blood type compatibility is crucial for safe transfusions. Always check compatibility charts or consult medical staff.',
     ),
-    _InfoCardData(
+    InfoCardData(
       title: 'Blood Types',
       icon: Icons.science,
-      info: 'The main blood types are A, B, AB, and O, each of which can be Rh-positive or Rh-negative.'
+      info: 'The main blood types are A, B, AB, and O, each of which can be Rh-positive or Rh-negative.',
     ),
   ];
 
-  static const List<_FAQData> faqs = [
-    _FAQData(
+  static const List<FAQData> faqs = [
+    FAQData(
       question: 'Who can request blood?',
-      answer: 'Anyone in need—patients, family members, or medical staff—can request blood with proper documentation.'
+      answer: 'Anyone in need—patients, family members, or medical staff—can request blood with proper documentation.',
     ),
-    _FAQData(
+    FAQData(
       question: 'How long does it take to process a request?',
-      answer: 'Processing times vary, but most requests are handled within a few hours to a day, depending on availability.'
+      answer: 'Processing times vary, but most requests are handled within a few hours to a day, depending on availability.',
     ),
-    _FAQData(
+    FAQData(
       question: 'Is blood always available when I request it?',
-      answer: 'Availability depends on current blood bank stocks and blood type demand. Some rare types may not always be available.'
+      answer: 'Availability depends on current blood bank stocks and blood type demand. Some rare types may not always be available.',
     ),
-    _FAQData(
+    FAQData(
       question: 'What information do I need to request blood?',
-      answer: 'You typically need patient details, blood type, quantity required, and a doctor\'s request or medical documentation.'
+      answer: 'You typically need patient details, blood type, quantity required, and a doctor\'s request or medical documentation.',
     ),
-    _FAQData(
+    FAQData(
       question: 'Is there a fee for requesting blood?',
-      answer: 'Fees depend on the hospital or blood bank. Some provide blood for free, while others may charge for processing.'
+      answer: 'Fees depend on the hospital or blood bank. Some provide blood for free, while others may charge for processing.',
     ),
   ];
+
+  const InformationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class InformationPage extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                children: infoCards.map((card) => _InfoCard(card: card)).toList(),
+                children: infoCards.map((card) => InfoCard(card: card)).toList(),
               ),
               const SizedBox(height: 24),
               const Text(
@@ -71,7 +72,7 @@ class InformationPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
               ),
               const SizedBox(height: 12),
-              ...faqs.map((faq) => _FAQTile(faq: faq)).toList(),
+              ...faqs.map((faq) => FAQTile(faq: faq)).toList(),
             ],
           ),
         ),
@@ -80,16 +81,16 @@ class InformationPage extends StatelessWidget {
   }
 }
 
-class _InfoCardData {
+class InfoCardData {
   final String title;
   final IconData icon;
   final String info;
-  const _InfoCardData({required this.title, required this.icon, required this.info});
+  const InfoCardData({required this.title, required this.icon, required this.info});
 }
 
-class _InfoCard extends StatelessWidget {
-  final _InfoCardData card;
-  const _InfoCard({required this.card});
+class InfoCard extends StatelessWidget {
+  final InfoCardData card;
+  const InfoCard({Key? key, required this.card}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +100,10 @@ class _InfoCard extends StatelessWidget {
         builder: (context) => AlertDialog(
           title: Text(card.title),
           content: Text(card.info),
-          actions: [
+          actions: const [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Close'),
+              onPressed: null, // Will be replaced below
+              child: Text('Close'),
             ),
           ],
         ),
@@ -111,7 +112,7 @@ class _InfoCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 6,
@@ -137,25 +138,28 @@ class _InfoCard extends StatelessWidget {
   }
 }
 
-class _FAQData {
+class FAQData {
   final String question;
   final String answer;
-  const _FAQData({required this.question, required this.answer});
+  const FAQData({required this.question, required this.answer});
 }
 
-class _FAQTile extends StatelessWidget {
-  final _FAQData faq;
-  const _FAQTile({required this.faq});
+class FAQTile extends StatelessWidget {
+  final FAQData faq;
+  const FAQTile({Key? key, required this.faq}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.red[100] ?? Colors.red)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.red[100] ?? Colors.red),
+      ),
       child: ExpansionTile(
         title: Text(faq.question, style: const TextStyle(fontWeight: FontWeight.w500)),
-        trailing: const Icon(Icons.keyboard_arrow_down), // Move 'trailing' here
-        children: [ // 'children' comes last
+        trailing: const Icon(Icons.keyboard_arrow_down),
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(faq.answer),

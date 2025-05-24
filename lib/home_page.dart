@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sandugo/navbar.dart';
-import 'FindBloodPage.dart';
-import 'InformationPage.dart';
 
 class Homepage extends StatefulWidget {
   final VoidCallback? onFindBloodTap;
@@ -83,7 +80,7 @@ class _HomepageState extends State<Homepage> {
             boxShadow: isHovered
                 ? [
                     BoxShadow(
-                      color: color.withOpacity(0.4),
+                      color: color.withAlpha((255 * 0.4).toInt()), // updated
                       blurRadius: 16,
                       offset: const Offset(0, 8),
                     ),
@@ -99,7 +96,7 @@ class _HomepageState extends State<Homepage> {
               Icon(
                 icon,
                 size: 100,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withAlpha((255 * 0.2).toInt()), // updated
               ),
               Text(
                 text,
