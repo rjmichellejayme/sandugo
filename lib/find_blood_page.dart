@@ -5,9 +5,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'SavedPlacesPage.dart';
-import 'InformationPage.dart';
-import 'HospitalDetailsPage.dart';
+import 'saved_places_page.dart';
+import 'information_page.dart';
+import 'hospital_details_page.dart';
 import 'hospital_data.dart';
 
 // class Hospital {
@@ -70,7 +70,7 @@ class FilteredHospitalsPage extends StatelessWidget {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: const ['a', 'b', 'c'],
               ),
               MarkerLayer(
@@ -156,14 +156,14 @@ class FilteredHospitalsPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.bookmark_border,
+                                icon: const Icon(Icons.bookmark_border,
                                     color: Colors.red),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SavedPlacesPage()),
+                                      builder: (context) => const SavedPlacesPage(), // Add const
+                                    ),
                                   );
                                 },
                               ),
@@ -174,8 +174,8 @@ class FilteredHospitalsPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            InformationPage()),
+                                      builder: (context) => const InformationPage(), // Add const
+                                    ),
                                   );
                                 },
                               ),
@@ -312,7 +312,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.bookmark_border,
                                   color: Colors.red,
                                 ),
@@ -427,7 +427,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 4,
@@ -441,7 +441,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Icon(Icons.search, color: Colors.grey),
                 ),
-                Expanded(
+                const Expanded(
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search Location',
@@ -536,7 +536,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 4,
@@ -576,7 +576,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 4,

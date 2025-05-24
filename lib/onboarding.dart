@@ -22,12 +22,12 @@ class OnboardingPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
+            const SizedBox(height: 32), // Fixed: Added const
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column( // Fixed: Added const
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     'Welcome to',
                     style: TextStyle(
@@ -64,7 +64,7 @@ class OnboardingPage extends StatelessWidget {
                 height: 56,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF7A2323),
+                    backgroundColor: const Color(0xFF7A2323), // Fixed: Added const
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
