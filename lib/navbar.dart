@@ -81,7 +81,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     Widget bodyContent;
     if (_showNearestFacilities) {
-      bodyContent = NearestFacilitiesPanel(hospitals: hospitals);
+      bodyContent = const NearestFacilitiesPanel();
     } else if (_isFirstLoad) {
       bodyContent = Homepage(
         onFindBloodTap: () {

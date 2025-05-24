@@ -113,43 +113,37 @@ class FilteredHospitalsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
-                          leading: const Icon(Icons.local_hospital,
-                              color: Colors.red),
+                          leading: const Icon(Icons.local_hospital, color: Colors.red),
                           title: Text(hospital.name),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(hospital.type),
                               const SizedBox(height: 4),
-                              Text('Open 24 hours',
-                                  style: TextStyle(color: Colors.green[700])),
+                              Text('Open 24 hours', style: TextStyle(color: Colors.green)),
                             ],
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.bookmark_border,
-                                    color: Colors.red),
+                                icon: const Icon(Icons.bookmark_border, color: Colors.red),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SavedPlacesPage(), // Add const
+                                      builder: (context) => const SavedPlacesPage(),
                                     ),
                                   );
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.info_outline,
-                                    color: Colors.red),
+                                icon: const Icon(Icons.info_outline, color: Colors.red),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const InformationPage(), // Add const
+                                      builder: (context) => const InformationPage(),
                                     ),
                                   );
                                 },
@@ -160,8 +154,7 @@ class FilteredHospitalsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HospitalDetailsPage(hospital: hospital),
+                                builder: (context) => HospitalDetailsPage(hospital: hospital),
                               ),
                             );
                           },

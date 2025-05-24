@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:latlong2/latlong.dart'; // Remove if unused
-import 'hospital_data.dart'; // or wherever your Hospital class is
+import 'hospital_data.dart';
 
 class HospitalDetailsPage extends StatelessWidget {
   final Hospital hospital;
@@ -16,7 +16,7 @@ class HospitalDetailsPage extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 16), // Add const
-          const Divider(),            // Add const
+          const Divider(), // Add const
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -26,7 +26,8 @@ class HospitalDetailsPage extends StatelessWidget {
                 const SizedBox(height: 8), // Add const
                 Text('Phone: ${hospital.phone}'),
                 const SizedBox(height: 8), // Add const
-                Text('Available Blood Types: ${hospital.bloodTypes.join(", ")}'),
+                Text(
+                    'Available Blood Types: ${hospital.bloodTypes.join(", ")}'),
                 const SizedBox(height: 8), // Add const
                 Text(
                     'Available Components: ${hospital.bloodComponents.join(", ")}'),
