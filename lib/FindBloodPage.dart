@@ -5,35 +5,39 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'SavedPlacesPage.dart';
+import 'InformationPage.dart';
+import 'HospitalDetailsPage.dart';
+import 'hospital_data.dart';
 
-class Hospital {
-  final String name;
-  final String type;
-  final LatLng location;
-  final String phone;
-  final List<String> bloodTypes;
-  final List<String> bloodComponents;
+// class Hospital {
+//   final String name;
+//   final String type;
+//   final LatLng location;
+//   final String phone;
+//   final List<String> bloodTypes;
+//   final List<String> bloodComponents;
 
-  Hospital({
-    required this.name,
-    required this.type,
-    required this.location,
-    required this.phone,
-    required this.bloodTypes,
-    required this.bloodComponents,
-  });
+//   Hospital({
+//     required this.name,
+//     required this.type,
+//     required this.location,
+//     required this.phone,
+//     required this.bloodTypes,
+//     required this.bloodComponents,
+//   });
 
-  factory Hospital.fromJson(Map<String, dynamic> json) {
-    return Hospital(
-      name: json['name'],
-      type: json['type'],
-      location: LatLng(json['latitude'], json['longitude']),
-      phone: json['phone'],
-      bloodTypes: List<String>.from(json['bloodtype']),
-      bloodComponents: List<String>.from(json['bloodcomponent']),
-    );
-  }
-}
+//   factory Hospital.fromJson(Map<String, dynamic> json) {
+//     return Hospital(
+//       name: json['name'],
+//       type: json['type'],
+//       location: LatLng(json['latitude'], json['longitude']),
+//       phone: json['phone'],
+//       bloodTypes: List<String>.from(json['bloodtype']),
+//       bloodComponents: List<String>.from(json['bloodcomponent']),
+//     );
+//   }
+// }
 
 class FindBloodPage extends StatefulWidget {
   const FindBloodPage({super.key});
@@ -66,8 +70,7 @@ class FilteredHospitalsPage extends StatelessWidget {
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                    'https://.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: 'https://.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: const ['a', 'b', 'c'],
               ),
               MarkerLayer(
@@ -153,21 +156,40 @@ class FilteredHospitalsPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon:
-                                    const Icon(Icons.phone, color: Colors.red),
+                                icon: Icon(Icons.bookmark_border,
+                                    color: Colors.red),
                                 onPressed: () {
-                                  // Launch dialer
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SavedPlacesPage()),
+                                  );
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.directions,
+                                icon: const Icon(Icons.info_outline,
                                     color: Colors.red),
                                 onPressed: () {
-                                  // Launch Google Maps
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            InformationPage()),
+                                  );
                                 },
                               ),
                             ],
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HospitalDetailsPage(hospital: hospital),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
@@ -290,17 +312,19 @@ class _FindBloodPageState extends State<FindBloodPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon:
-                                    const Icon(Icons.phone, color: Colors.red),
+                                icon: Icon(
+                                  Icons.bookmark_border,
+                                  color: Colors.red,
+                                ),
                                 onPressed: () {
-                                  // Optional: launch a phone dialer
+                                  Navigator.pushNamed(context, '/saved-places');
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.directions,
+                                icon: const Icon(Icons.info_outline,
                                     color: Colors.red),
                                 onPressed: () {
-                                  // Optional: launch Google Maps
+                                  Navigator.pushNamed(context, '/information');
                                 },
                               ),
                             ],
@@ -390,23 +414,106 @@ class _FindBloodPageState extends State<FindBloodPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // Custom Header
+          const SizedBox(height: 8),
+          // Location Section Title
           const Text('Location',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
           const Text('SanDUGO uses GPS to find nearest locations.'),
-          const SizedBox(height: 8),
-          currentLocation == null
-              ? Container(
-                  height: 180,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/ph_map_sample.png'),
-                      fit: BoxFit.cover,
+          const SizedBox(height: 12),
+          // Search Bar
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Icon(Icons.search, color: Colors.grey),
+                ),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search Location',
+                      border: InputBorder.none,
                     ),
                   ),
-                  alignment: Alignment.topRight,
-                  padding: const EdgeInsets.all(8),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.mic, color: Colors.grey),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Search your desired location or use your current location.',
+            style: TextStyle(fontSize: 13, color: Colors.black54),
+          ),
+          const SizedBox(height: 10),
+          // Map Section with floating location button
+          SizedBox(
+            height: 200,
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: currentLocation == null
+                      ? Container(
+                          color: Colors.grey[200],
+                        )
+                      : FlutterMap(
+                          options: MapOptions(
+                            initialCenter: currentLocation!,
+                            initialZoom: 13,
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              subdomains: const ['a', 'b', 'c'],
+                              userAgentPackageName: 'com.project.sandugo',
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: currentLocation!,
+                                  width: 40,
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                  child: const Icon(Icons.my_location,
+                                      color: Colors.blue, size: 40),
+                                ),
+                                ...filteredHospitals.map((hospital) => Marker(
+                                      point: hospital.location,
+                                      width: 40,
+                                      height: 40,
+                                      alignment: Alignment.center,
+                                      child: Tooltip(
+                                        message: hospital.name,
+                                        child: const Icon(Icons.local_hospital,
+                                            color: Colors.red, size: 32),
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     child: IconButton(
@@ -414,85 +521,88 @@ class _FindBloodPageState extends State<FindBloodPage> {
                       onPressed: _getUserLocation,
                     ),
                   ),
-                )
-              : SizedBox(
-                  height: 200,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: FlutterMap(
-                      options: MapOptions(
-                        initialCenter: currentLocation!,
-                        initialZoom: 13,
-                      ),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          subdomains: const ['a', 'b', 'c'],
-                          userAgentPackageName: 'com.project.sandugo',
-                        ),
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              point: currentLocation!,
-                              width: 40,
-                              height: 40,
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.my_location,
-                                  color: Colors.blue, size: 40),
-                            ),
-                            ...filteredHospitals.map((hospital) => Marker(
-                                  point: hospital.location,
-                                  width: 40,
-                                  height: 40,
-                                  alignment: Alignment.center,
-                                  child: Tooltip(
-                                    message: hospital.name,
-                                    child: const Icon(Icons.local_hospital,
-                                        color: Colors.red, size: 32),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
+          // Blood Type Section
           const Text('Blood Type',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
           const Text('Select the needed blood type.'),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              hintText: 'Choose Blood Type',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
             ),
-            value: selectedBloodType,
-            onChanged: (value) => setState(() => selectedBloodType = value),
-            items: bloodTypes.map((type) {
-              return DropdownMenuItem(value: type, child: Text(type));
-            }).toList(),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                hintText: 'Choose Blood Type',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              value: selectedBloodType,
+              onChanged: (value) => setState(() => selectedBloodType = value),
+              items: bloodTypes.map((type) {
+                return DropdownMenuItem(
+                    value: type,
+                    child: Text(type == 'All' ? 'All' : 'Blood Type $type'));
+              }).toList(),
+            ),
           ),
           const SizedBox(height: 20),
+          // Blood Component Section
           const Text('Blood Component',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
           const Text('Select the required blood component.'),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              hintText: 'Choose Blood Component',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
             ),
-            value: selectedComponent,
-            onChanged: (value) => setState(() => selectedComponent = value),
-            items: bloodComponents.map((component) {
-              return DropdownMenuItem(value: component, child: Text(component));
-            }).toList(),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                hintText: 'Choose Blood Component',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              value: selectedComponent,
+              onChanged: (value) => setState(() => selectedComponent = value),
+              items: bloodComponents.map((component) {
+                return DropdownMenuItem(
+                    value: component, child: Text(component));
+              }).toList(),
+            ),
           ),
           const SizedBox(height: 30),
           Row(
