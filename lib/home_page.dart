@@ -40,7 +40,6 @@ class _HomepageState extends State<Homepage> {
               icon: Icons.local_hospital,
               text: 'NEAREST FACILITIES' ,
               onTap: widget.onNearestFacilitiesTap ?? () {
-                // Navigate to Nearest Facilities Page
               },
             ),
             const SizedBox(height: 16),
