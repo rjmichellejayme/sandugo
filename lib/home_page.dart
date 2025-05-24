@@ -28,7 +28,7 @@ class _HomepageState extends State<Homepage> {
           children: [
             _buildHomeButton(
               index: 0,
-              color: const Color(0xFFFFCDD2),
+              color: const Color(0xFFE57373),
               icon: Icons.opacity,
               text: 'FIND BLOOD',
               onTap: widget.onFindBloodTap ?? (){},
@@ -40,13 +40,12 @@ class _HomepageState extends State<Homepage> {
               icon: Icons.local_hospital,
               text: 'NEAREST FACILITIES' ,
               onTap: widget.onNearestFacilitiesTap ?? () {
-                // Navigate to Nearest Facilities Page
               },
             ),
             const SizedBox(height: 16),
             _buildHomeButton(
               index: 2,
-              color: const Color(0xFFE57373),
+              color: const Color(0xFFFFCDD2),
               icon: Icons.help_outline,
               text: 'INFORMATION PAGE',
               onTap: widget.onInformationPageTap ?? () {},

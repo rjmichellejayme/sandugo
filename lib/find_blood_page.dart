@@ -225,6 +225,9 @@ class _FindBloodPageState extends State<FindBloodPage> {
   String? selectedBloodType;
   String? selectedComponent;
 
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   final List<String> bloodTypes = [
     'All',
     'A+',
@@ -244,6 +247,9 @@ class _FindBloodPageState extends State<FindBloodPage> {
     'Platelets',
     'Red Cells'
   ];
+
+  Hospital? _selectedHospital;
+  final MapController _mapController = MapController();
 
   @override
   void initState() {
@@ -384,7 +390,11 @@ class _FindBloodPageState extends State<FindBloodPage> {
               .map((e) => e.toLowerCase())
               .contains(selectedComponent!.toLowerCase());
 
-      return matchesBloodType && matchesComponent;
+      final matchesSearch = _searchQuery.isEmpty ||
+          hospital.name.toLowerCase().contains(_searchQuery.toLowerCase());
+          // You can add more fields here, e.g. hospital.address
+
+      return matchesBloodType && matchesComponent && matchesSearch;
     }).toList();
 
     matches.sort((a, b) {
@@ -441,17 +451,33 @@ class _FindBloodPageState extends State<FindBloodPage> {
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Icon(Icons.search, color: Colors.grey),
                 ),
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: _searchController,
+                    decoration: const InputDecoration(
                       hintText: 'Search Location',
                       border: InputBorder.none,
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value.trim();
+                      });
+                    },
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.mic, color: Colors.grey),
-                  onPressed: () {},
+                  icon: const Icon(Icons.clear, color: Colors.grey),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _searchQuery = '';
+                      _selectedHospital = null;
+                    });
+                    // Move map back to user's current location and default zoom
+                    if (currentLocation != null) {
+                      _mapController.move(currentLocation!, 13);
+                    }
+                  },
                 ),
               ],
             ),
@@ -462,6 +488,46 @@ class _FindBloodPageState extends State<FindBloodPage> {
             style: TextStyle(fontSize: 13, color: Colors.black54),
           ),
           const SizedBox(height: 10),
+
+          // --- Place the search results dropdown here ---
+          if (_searchQuery.isNotEmpty && filteredHospitals.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: filteredHospitals.length,
+                itemBuilder: (context, index) {
+                  final hospital = filteredHospitals[index];
+                  return ListTile(
+                    title: Text(hospital.name),
+                    subtitle: Text(hospital.type),
+                    onTap: () {
+                      setState(() {
+                        _selectedHospital = hospital;
+                        _searchController.text = hospital.name;
+                        _searchQuery = hospital.name;
+                      });
+                      // Animate map to hospital location
+                      _mapController.move(hospital.location, 16);
+                    },
+                  );
+                },
+              ),
+            ),
+          // --- End search results dropdown ---
+
           // Map Section with floating location button
           SizedBox(
             height: 200,
@@ -474,8 +540,9 @@ class _FindBloodPageState extends State<FindBloodPage> {
                           color: Colors.grey[200],
                         )
                       : FlutterMap(
+                          mapController: _mapController,
                           options: MapOptions(
-                            initialCenter: currentLocation!,
+                            initialCenter: _selectedHospital?.location ?? currentLocation!,
                             initialZoom: 13,
                           ),
                           children: [
@@ -502,8 +569,11 @@ class _FindBloodPageState extends State<FindBloodPage> {
                                       alignment: Alignment.center,
                                       child: Tooltip(
                                         message: hospital.name,
-                                        child: const Icon(Icons.local_hospital,
-                                            color: Colors.red, size: 32),
+                                        child: Icon(
+                                          Icons.local_hospital,
+                                          color: _selectedHospital == hospital ? Colors.blue : Colors.red,
+                                          size: 32,
+                                        ),
                                       ),
                                     )),
                               ],
