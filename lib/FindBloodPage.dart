@@ -362,9 +362,12 @@ class _FindBloodPageState extends State<FindBloodPage> {
   Future<void> _loadHospitals() async {
     final String response =
         await rootBundle.loadString('assets/hospitals.json');
-    final List<dynamic> data = jsonDecode(response);
+    final Map<String, dynamic> data = jsonDecode(response);
+    final hospitalsMap = data['hospitals'] as Map<String, dynamic>;
     setState(() {
-      allHospitals = data.map((e) => Hospital.fromJson(e)).toList();
+      allHospitals = hospitalsMap.values
+          .map((e) => Hospital.fromJson(e as Map<String, dynamic>))
+          .toList();
     });
   }
 

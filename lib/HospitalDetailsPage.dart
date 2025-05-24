@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'hospital_data.dart'; // or wherever your Hospital class is
+import 'hospital_data.dart'; 
+
+String capitalizeWords(String input) {
+  return input
+      .split(' ')
+      .map((word) => word.isNotEmpty
+          ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+          : '')
+      .join(' ');
+}
 
 class HospitalDetailsPage extends StatelessWidget {
   final Hospital hospital;
@@ -16,14 +25,19 @@ class HospitalDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Type: ${hospital.type}'),
-            SizedBox(height: 8),
+            Text(hospital.name, 
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            const SizedBox(height: 8),
+            Text('Type: ${capitalizeWords(hospital.type)}'),
+            const SizedBox(height: 8),
             Text('Phone: ${hospital.phone}'),
-            SizedBox(height: 8),
-            Text('Available Blood Types: ${hospital.bloodTypes.join(", ")}'),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
+            Text('Address: ${hospital.address}'),
+            const SizedBox(height: 8),
+            Text('Available Blood Types: ${hospital.bloodTypes.map((bt) => capitalizeWords(bt)).join(", ")}'),
+            const SizedBox(height: 8),
             Text(
-                'Available Components: ${hospital.bloodComponents.join(", ")}'),
+                'Available Components: ${hospital.bloodComponents.map((bt) => capitalizeWords(bt)).join(", ")}'),
             // Add more details as needed
           ],
         ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'navbar.dart';  // Ensure this is correctly implemented or imported
+// Ensure this is correctly implemented or imported
 
 class InformationPage extends StatefulWidget {
   const InformationPage({super.key});
@@ -148,7 +148,10 @@ class _InfoCard extends StatelessWidget {
         onTap: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(card.title),
+            title: Text(
+              card.title,
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red[900]), 
+            ),
             content: card.title == 'Blood Requests & Compatibility'
                 ? SingleChildScrollView(
                     child: Column(
@@ -227,7 +230,10 @@ class _InfoCard extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Close'),
+                child: const Text(
+                  'Close',
+                  style: TextStyle(fontWeight: FontWeight.bold), // bold button text
+                ),
               ),
             ],
           ),
@@ -289,16 +295,46 @@ class _FAQTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.red[100] ?? Colors.red)),
-      child: ExpansionTile(
-        title: Text(faq.question, style: const TextStyle(fontWeight: FontWeight.w500)),
-        trailing: const Icon(Icons.keyboard_arrow_down), // Move 'trailing' here
-        children: [ // 'children' comes last
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(faq.answer),
+      elevation: 1,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: Colors.red,
+        ),
+        
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+          expansionTileTheme: ExpansionTileThemeData(
+            iconColor: Colors.red[600],
+            collapsedIconColor: Colors.red[400],
+            collapsedTextColor: Colors.black87,
+            textColor: Colors.red[900],
           ),
-        ],
+        ),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 12),
+          childrenPadding: const EdgeInsets.all(10),
+          title: Text(
+            faq.question,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          trailing: const Icon(Icons.expand_more),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                faq.answer,
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
