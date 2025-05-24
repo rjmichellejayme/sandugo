@@ -24,6 +24,8 @@ class HospitalDetailsPage extends StatelessWidget {
               children: [
                 Text('Type: ${hospital.type}'),
                 const SizedBox(height: 8), // Add const
+                Text('Address: ${hospital.address}'),
+                const SizedBox(height: 8),
                 Text('Phone: ${hospital.phone}'),
                 const SizedBox(height: 8), // Add const
                 Text(

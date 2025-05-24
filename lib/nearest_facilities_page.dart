@@ -47,6 +47,7 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
       final data = doc.data();
       return Hospital(
         name: data['name'],
+        address: data['address'],
         type: data['type'],
         location: LatLng(
           data['location'].latitude,
