@@ -15,11 +15,29 @@ class OnboardingPage extends StatelessWidget {
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              child: Image.asset(
-                'assets/onboarding.png',
-                height: 260,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              child: Stack(
+                children: [
+                  Image.asset(
+                    'assets/onboarding.png',
+                    height: 260,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    height: 260,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromRGBO(249, 237, 236, 0),
+                          Color.fromRGBO(249, 237, 236, 1),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 32), // Fixed: Added const
@@ -31,9 +49,9 @@ class OnboardingPage extends StatelessWidget {
                   Text(
                     'Welcome to',
                     style: TextStyle(
-                      fontSize: 40,
+                      fontSize: 32,
                       fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
+                      // letterSpacing: 1.2,
                     ),
                   ),
                   Text(
@@ -42,14 +60,14 @@ class OnboardingPage extends StatelessWidget {
                       fontSize: 48,
                       fontWeight: FontWeight.w900,
                       color: Colors.black,
-                      letterSpacing: 1.5,
+                      // letterSpacing: 1.5,
                     ),
                   ),
                   SizedBox(height: 20),
                   Text(
                     'SanDUGO connects donors, patients, and blood banks to save lives efficiently and effortlessly.',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: Colors.black87,
                     ),
                   ),
