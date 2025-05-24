@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:sandugo/find_blood_page.dart';
 import 'package:sandugo/home_page.dart';
-import 'package:sandugo/nearest_facilities.dart';
+import 'package:sandugo/nearest_facilities_page.dart';
 import 'package:sandugo/information_page.dart';
 import 'package:sandugo/saved_places_page.dart';
+import 'hospital_data.dart'; // Make sure this is imported
+
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -14,9 +20,11 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
-   bool _isFirstLoad = true;
-   bool _showNearestFacilities= false;
-  
+  bool _isFirstLoad = true;
+  bool _showNearestFacilities = false;
+
+  List<Hospital> hospitals = [];
+  LatLng? currentLocation;
 
   List<Widget> widgetOptions = <Widget>[
     const FindBloodPage(),
@@ -30,6 +38,36 @@ class _BottomNavBarState extends State<BottomNavBar> {
     "FAQs",
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _getUserLocationAndHospitals();
+  }
+
+  Future<void> _getUserLocationAndHospitals() async {
+    // Get location permission and current location
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      final position = await Geolocator.getCurrentPosition();
+      setState(() {
+        currentLocation = LatLng(position.latitude, position.longitude);
+      });
+    }
+
+    // Load hospitals from assets
+    final String response =
+        await rootBundle.loadString('assets/hospitals.json');
+    final List<dynamic> data = jsonDecode(response);
+    setState(() {
+      hospitals = data.map((e) => Hospital.fromJson(e)).toList();
+    });
+  }
+
   //Function to select on List
   void _onItemTap(int index) {
     setState(() {
@@ -41,10 +79,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    //Determine Which Page to load
     Widget bodyContent;
     if (_showNearestFacilities) {
-      bodyContent = const FacilitiesPage();
+      bodyContent = NearestFacilitiesPanel(hospitals: hospitals);
     } else if (_isFirstLoad) {
       bodyContent = Homepage(
         onFindBloodTap: () {
@@ -108,13 +145,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       body: Center(
         child: bodyContent,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.call),
-        onPressed: () {
-          // Should redirect to Add Routine/Task
-          debugPrint("Emergency Call");
-        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.red,
