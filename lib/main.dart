@@ -1,22 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:sandugo/splash_screen.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
+
+  // Initialize Firebase
+  Future<FirebaseApp> _initializeFirebase() async {
+    return await Firebase.initializeApp();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SanDUGO',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      title: 'sanDUGO',
+      home: FutureBuilder(
+        future: _initializeFirebase(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          } else if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                  child: Text('Firebase init failed: ${snapshot.error}')),
+            );
+          } else {
+            return const SplashScreen(); // continue to your app
+          }
+        },
       ),
-      home: const SplashScreen(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

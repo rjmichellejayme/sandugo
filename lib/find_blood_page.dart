@@ -9,35 +9,7 @@ import 'saved_places_page.dart';
 import 'information_page.dart';
 import 'hospital_details_page.dart';
 import 'hospital_data.dart';
-
-// class Hospital {
-//   final String name;
-//   final String type;
-//   final LatLng location;
-//   final String phone;
-//   final List<String> bloodTypes;
-//   final List<String> bloodComponents;
-
-//   Hospital({
-//     required this.name,
-//     required this.type,
-//     required this.location,
-//     required this.phone,
-//     required this.bloodTypes,
-//     required this.bloodComponents,
-//   });
-
-//   factory Hospital.fromJson(Map<String, dynamic> json) {
-//     return Hospital(
-//       name: json['name'],
-//       type: json['type'],
-//       location: LatLng(json['latitude'], json['longitude']),
-//       phone: json['phone'],
-//       bloodTypes: List<String>.from(json['bloodtype']),
-//       bloodComponents: List<String>.from(json['bloodcomponent']),
-//     );
-//   }
-// }
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FindBloodPage extends StatefulWidget {
   const FindBloodPage({super.key});
@@ -70,7 +42,8 @@ class FilteredHospitalsPage extends StatelessWidget {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: const ['a', 'b', 'c'],
               ),
               MarkerLayer(
@@ -162,7 +135,8 @@ class FilteredHospitalsPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const SavedPlacesPage(), // Add const
+                                      builder: (context) =>
+                                          const SavedPlacesPage(), // Add const
                                     ),
                                   );
                                 },
@@ -174,7 +148,8 @@ class FilteredHospitalsPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const InformationPage(), // Add const
+                                      builder: (context) =>
+                                          const InformationPage(), // Add const
                                     ),
                                   );
                                 },
@@ -366,12 +341,22 @@ class _FindBloodPageState extends State<FindBloodPage> {
   }
 
   Future<void> _loadHospitals() async {
-    final String response =
-        await rootBundle.loadString('assets/hospitals.json');
-    final List<dynamic> data = jsonDecode(response);
-    setState(() {
-      allHospitals = data.map((e) => Hospital.fromJson(e)).toList();
-    });
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('hospitals').get();
+      print('Fetched ${snapshot.docs.length} hospitals');
+
+      setState(() {
+        allHospitals = snapshot.docs.map((doc) {
+          final data = doc.data();
+          print('Hospital Data: $data');
+          return Hospital.fromJson(data);
+        }).toList();
+      });
+    } catch (e, stack) {
+      print('❌ Error loading hospitals: $e');
+      print(stack);
+    }
   }
 
   List<Hospital> get filteredHospitals {
@@ -392,7 +377,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
 
       final matchesSearch = _searchQuery.isEmpty ||
           hospital.name.toLowerCase().contains(_searchQuery.toLowerCase());
-          // You can add more fields here, e.g. hospital.address
+      // You can add more fields here, e.g. hospital.address
 
       return matchesBloodType && matchesComponent && matchesSearch;
     }).toList();
@@ -542,7 +527,8 @@ class _FindBloodPageState extends State<FindBloodPage> {
                       : FlutterMap(
                           mapController: _mapController,
                           options: MapOptions(
-                            initialCenter: _selectedHospital?.location ?? currentLocation!,
+                            initialCenter:
+                                _selectedHospital?.location ?? currentLocation!,
                             initialZoom: 13,
                           ),
                           children: [
@@ -571,7 +557,9 @@ class _FindBloodPageState extends State<FindBloodPage> {
                                         message: hospital.name,
                                         child: Icon(
                                           Icons.local_hospital,
-                                          color: _selectedHospital == hospital ? Colors.blue : Colors.red,
+                                          color: _selectedHospital == hospital
+                                              ? Colors.blue
+                                              : Colors.red,
                                           size: 32,
                                         ),
                                       ),
