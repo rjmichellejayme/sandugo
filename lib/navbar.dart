@@ -25,11 +25,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   List<Hospital> hospitals = [];
   LatLng? currentLocation;
 
-  List<Widget> widgetOptions = <Widget>[
-    const FindBloodPage(),
-    const SavedPlacesPage(),
-    const InformationPage(),
-  ];
 
   final List<String> pageTitles = [
     "Filters",
@@ -78,6 +73,21 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Widget> widgetOptions = <Widget>[
+      FindBloodPage(
+        onShowSavedPlaces: (){
+          setState(() {
+            _currentIndex = 1; // SavedPlacesPage
+            _isFirstLoad = false;
+            _showNearestFacilities = false;
+          });
+        },
+      ),
+      const SavedPlacesPage(),
+      const InformationPage(),
+    ];
+
     Widget bodyContent;
     if (_showNearestFacilities) {
       bodyContent = const NearestFacilitiesPanel();

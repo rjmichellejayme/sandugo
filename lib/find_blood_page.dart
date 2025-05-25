@@ -12,13 +12,15 @@ import 'hospital_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FindBloodPage extends StatefulWidget {
-  const FindBloodPage({super.key});
+  final VoidCallback? onShowSavedPlaces;
+  const FindBloodPage({super.key, this.onShowSavedPlaces});
 
   @override
   State<FindBloodPage> createState() => _FindBloodPageState();
 }
 
 class FilteredHospitalsPage extends StatelessWidget {
+  final VoidCallback? onShowSavedPlaces;
   final List<Hospital> hospitals;
   final LatLng userLocation;
 
@@ -26,6 +28,7 @@ class FilteredHospitalsPage extends StatelessWidget {
     super.key,
     required this.hospitals,
     required this.userLocation,
+    this.onShowSavedPlaces,
   });
 
   @override
@@ -132,13 +135,10 @@ class FilteredHospitalsPage extends StatelessWidget {
                                 icon: const Icon(Icons.bookmark_border,
                                     color: Colors.red),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SavedPlacesPage(),
-                                    ),
-                                  );
+                                  Navigator.pop(context);
+                                    if (onShowSavedPlaces != null) {
+                                      onShowSavedPlaces!();
+                                    } 
                                 },
                               ),
                               IconButton(
@@ -733,6 +733,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
                             builder: (context) => FilteredHospitalsPage(
                               hospitals: sortedHospitals,
                               userLocation: currentLocation!,
+                              onShowSavedPlaces: widget.onShowSavedPlaces,
                             ),
                           ),
                         );
