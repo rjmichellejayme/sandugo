@@ -148,7 +148,11 @@ class InfoCard extends StatelessWidget {
         onTap: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(card.title),
+            title: Text(
+              card.title,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.red[900]),
+            ),
             content: card.title == 'Blood Requests & Compatibility'
                 ? SingleChildScrollView(
                     child: Column(
@@ -232,7 +236,11 @@ class InfoCard extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Close'),
+                child: const Text(
+                  'Close',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold), // bold button text
+                ),
               ),
             ],
           ),
@@ -287,29 +295,65 @@ class FAQData {
   const FAQData({required this.question, required this.answer});
 }
 
-class FAQTile extends StatelessWidget {
+class FAQTile extends StatefulWidget {
   final FAQData faq;
   const FAQTile({Key? key, required this.faq}) : super(key: key);
+
+  @override
+  State<FAQTile> createState() => _FAQTileState();
+}
+
+class _FAQTileState extends State<FAQTile> {
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
+      elevation: 1,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.red[100] ?? Colors.red),
+        side: BorderSide(
+          color: Colors.red,
+        ),
       ),
-      child: ExpansionTile(
-        title: Text(faq.question,
-            style: const TextStyle(fontWeight: FontWeight.w500)),
-        trailing: const Icon(Icons.keyboard_arrow_down),
-        children: <Widget>[
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(faq.answer),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+          expansionTileTheme: ExpansionTileThemeData(
+            iconColor: Colors.red[600],
+            collapsedIconColor: Colors.red[400],
+            collapsedTextColor: Colors.black87,
+            textColor: Colors.red[900],
           ),
-        ],
+        ),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 12),
+          childrenPadding: const EdgeInsets.all(10),
+          title: Text(
+            widget.faq.question,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          trailing: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+          onExpansionChanged: (expanded) {
+            setState(() {
+              _expanded = expanded;
+            });
+          },
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.faq.answer,
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
