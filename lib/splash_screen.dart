@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: const Color(0xFFF9EDEC),
       body: Center(
         child: Image.asset(
-          'assets/app_icon/loader.gif',
+          'assets/app_icon/loader2.gif',
           fit: BoxFit.contain,
           width: 400,
           height: 400
