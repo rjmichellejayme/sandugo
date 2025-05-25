@@ -59,12 +59,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
 
     // Load hospitals from assets
-    final String response =
-        await rootBundle.loadString('assets/hospitals.json');
-    final List<dynamic> data = jsonDecode(response);
-    setState(() {
-      hospitals = data.map((e) => Hospital.fromJson(e)).toList();
-    });
+    try {
+      final String response = await rootBundle.loadString('assets/hospitals.json');
+      final List<dynamic> data = jsonDecode(response);
+      setState(() {
+        hospitals = data.map((e) => Hospital.fromJson(e)).toList();
+      });
+    } catch (e) {
+      // Handle error, e.g. show a message or log
+      debugPrint('Error loading hospitals.json: $e');
+    }
   }
 
   //Function to select on List
