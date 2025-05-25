@@ -23,6 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'sanDUGO',
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        textTheme: ThemeData.light().textTheme.apply(
+              fontFamily: 'Poppins',
+            ),
+      ),
       home: FutureBuilder(
         future: _initializeFirebase(),
         builder: (context, snapshot) {

@@ -10,7 +10,6 @@ import 'package:sandugo/information_page.dart';
 import 'package:sandugo/saved_places_page.dart';
 import 'hospital_data.dart'; // Make sure this is imported
 
-
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 
@@ -118,43 +117,52 @@ class _BottomNavBarState extends State<BottomNavBar> {
               : _isFirstLoad
                   ? "Home"
                   : pageTitles[_currentIndex],
-          style: const TextStyle( // Add const here
+          style: const TextStyle(
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.bold,
-            color: Colors.red,
+            color: Color(0xFFD14E52),
             fontSize: 24,
           ),
           textAlign: TextAlign.center,
         ),
         //Back Button only if not on Home
-        leading: (_isFirstLoad && !_showNearestFacilities) 
-          ? null 
-          : IconButton(
-              icon: const Icon(Icons.arrow_back), // <-- Add const here
-              tooltip: "Home",
-              onPressed: () {
-                setState(() {
-                  if (_showNearestFacilities) {
-                    _showNearestFacilities = false;
-                    _isFirstLoad = true;
-                  } else {
-                    _isFirstLoad = true;
-                  }
-                });
-              },
-            ),
+        leading: (_isFirstLoad && !_showNearestFacilities)
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.arrow_back), // <-- Add const here
+                tooltip: "Home",
+                onPressed: () {
+                  setState(() {
+                    if (_showNearestFacilities) {
+                      _showNearestFacilities = false;
+                      _isFirstLoad = true;
+                    } else {
+                      _isFirstLoad = true;
+                    }
+                  });
+                },
+              ),
       ),
       body: Center(
         child: bodyContent,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.red,
+        selectedItemColor: const Color(0xFFD14E52),
+        unselectedItemColor: const Color(0xFF434343),
         backgroundColor: Colors.white,
+        selectedLabelStyle: const TextStyle(
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400, // Poppins Regular
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400, // Poppins Regular
+        ),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.pin_drop_outlined),
             activeIcon: Icon(Icons.pin_drop_sharp),
             label: "Find Blood",
-            
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmark_outlined),

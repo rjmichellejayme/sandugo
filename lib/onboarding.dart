@@ -40,33 +40,34 @@ class OnboardingPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 32), // Fixed: Added const
+            const SizedBox(height: 32),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column( // Fixed: Added const
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Welcome to',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontFamily: 'Poppins',
+                      fontSize: 40,
                       fontWeight: FontWeight.w900,
-                      // letterSpacing: 1.2,
                     ),
                   ),
                   Text(
                     'SanDUGO',
                     style: TextStyle(
-                      fontSize: 48,
+                      fontFamily: 'Poppins',
+                      fontSize: 60,
                       fontWeight: FontWeight.w900,
                       color: Colors.black,
-                      // letterSpacing: 1.5,
                     ),
                   ),
                   SizedBox(height: 20),
                   Text(
                     'SanDUGO connects donors, patients, and blood banks to save lives efficiently and effortlessly.',
                     style: TextStyle(
+                      fontFamily: 'Poppins',
                       fontSize: 16,
                       color: Colors.black87,
                     ),
@@ -76,13 +77,15 @@ class OnboardingPage extends StatelessWidget {
             ),
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
               child: SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7A2323), // Fixed: Added const
+                    backgroundColor:
+                        const Color(0xFF7A2323), // Fixed: Added const
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -91,12 +94,14 @@ class OnboardingPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const BottomNavBar()),
+                      MaterialPageRoute(
+                          builder: (context) => const BottomNavBar()),
                     );
                   },
                   child: const Text(
                     'Get Started',
                     style: TextStyle(
+                      fontFamily: 'Poppins', // Set font to Poppins
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

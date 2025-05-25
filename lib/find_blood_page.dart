@@ -113,37 +113,43 @@ class FilteredHospitalsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
-                          leading: const Icon(Icons.local_hospital, color: Colors.red),
+                          leading: const Icon(Icons.local_hospital,
+                              color: Colors.red),
                           title: Text(hospital.name),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(hospital.type),
                               const SizedBox(height: 4),
-                              Text('Open 24 hours', style: TextStyle(color: Colors.green)),
+                              Text('Open 24 hours',
+                                  style: TextStyle(color: Colors.green)),
                             ],
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.bookmark_border, color: Colors.red),
+                                icon: const Icon(Icons.bookmark_border,
+                                    color: Colors.red),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const SavedPlacesPage(),
+                                      builder: (context) =>
+                                          const SavedPlacesPage(),
                                     ),
                                   );
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.info_outline, color: Colors.red),
+                                icon: const Icon(Icons.info_outline,
+                                    color: Colors.red),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const InformationPage(),
+                                      builder: (context) =>
+                                          const InformationPage(),
                                     ),
                                   );
                                 },
@@ -154,7 +160,8 @@ class FilteredHospitalsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HospitalDetailsPage(hospital: hospital),
+                                builder: (context) =>
+                                    HospitalDetailsPage(hospital: hospital),
                               ),
                             );
                           },
@@ -399,8 +406,9 @@ class _FindBloodPageState extends State<FindBloodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF9EDEC),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
         children: [
           // Custom Header
           const SizedBox(height: 8),
@@ -408,7 +416,9 @@ class _FindBloodPageState extends State<FindBloodPage> {
           const Text('Location',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          const Text('SanDUGO uses GPS to find nearest locations.'),
+          const Text('SanDUGO uses GPS to find nearest locations.',
+              style: TextStyle(fontSize: 14, color: Colors.black)),
+
           const SizedBox(height: 12),
           // Search Bar
           Container(
@@ -463,7 +473,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
           const SizedBox(height: 8),
           const Text(
             'Search your desired location or use your current location.',
-            style: TextStyle(fontSize: 13, color: Colors.black54),
+            style: TextStyle(fontSize: 14, color: Colors.black),
           ),
           const SizedBox(height: 10),
 
@@ -581,7 +591,8 @@ class _FindBloodPageState extends State<FindBloodPage> {
           const Text('Blood Type',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          const Text('Select the needed blood type.'),
+          const Text('Select the needed blood type.',
+              style: TextStyle(fontSize: 14, color: Colors.black)),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
@@ -604,15 +615,22 @@ class _FindBloodPageState extends State<FindBloodPage> {
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
+              dropdownColor: Colors.white, 
               value: selectedBloodType,
               onChanged: (value) => setState(() => selectedBloodType = value),
               items: bloodTypes.map((type) {
                 return DropdownMenuItem(
-                    value: type,
-                    child: Text(type == 'All' ? 'All' : 'Blood Type $type'));
+                  value: type,
+                  child: Text(
+                    type == 'All' ? 'All' : 'Blood Type $type',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Color(0xFF434343),
+                    ),
+                  ),
+                );
               }).toList(),
             ),
           ),
@@ -621,7 +639,8 @@ class _FindBloodPageState extends State<FindBloodPage> {
           const Text('Blood Component',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          const Text('Select the required blood component.'),
+          const Text('Select the required blood component.',
+              style: TextStyle(fontSize: 14, color: Colors.black)),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
@@ -681,7 +700,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                    backgroundColor: const Color(0xFFD14E52),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
