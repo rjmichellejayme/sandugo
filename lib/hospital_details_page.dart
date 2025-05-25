@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
-// import 'package:latlong2/latlong.dart'; // Remove if unused
 import 'hospital_data.dart';
+
+String capitalizeWords(String input) {
+  return input
+      .split(' ')
+      .map((word) => word.isNotEmpty
+          ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+          : '')
+      .join(' ');
+}
 
 class HospitalDetailsPage extends StatelessWidget {
   final Hospital hospital;
@@ -22,17 +30,19 @@ class HospitalDetailsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Type: ${hospital.type}'),
-                const SizedBox(height: 8), // Add const
-                Text('Address: ${hospital.address}'),
+                Text(hospital.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20)),
                 const SizedBox(height: 8),
                 Text('Phone: ${hospital.phone}'),
-                const SizedBox(height: 8), // Add const
+                const SizedBox(height: 8),
+                Text('Address: ${hospital.address}'),
+                const SizedBox(height: 8),
                 Text(
-                    'Available Blood Types: ${hospital.bloodTypes.join(", ")}'),
-                const SizedBox(height: 8), // Add const
+                    'Available Blood Types: ${hospital.bloodTypes.map((bt) => capitalizeWords(bt)).join(", ")}'),
+                const SizedBox(height: 8),
                 Text(
-                    'Available Components: ${hospital.bloodComponents.join(", ")}'),
+                    'Available Components: ${hospital.bloodComponents.map((bt) => capitalizeWords(bt)).join(", ")}'),
                 // Add more details as needed
               ],
             ),
