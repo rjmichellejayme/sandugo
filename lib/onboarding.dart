@@ -7,9 +7,15 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
-class OnboardingPage extends StatelessWidget {
+class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  bool isLoading = false;
   Future<String?> getDeviceId() async {
     final deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
@@ -130,29 +136,39 @@ class OnboardingPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        const Color(0xFF7A2323), // Fixed: Added const
+                        const Color(0xFF7A2323),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 4,
                   ),
-                  onPressed: () async {
-                    await storeDeviceIdToFirestore();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BottomNavBar()),
-                    );
-                  },
-                  child: const Text(
-                    'Get Started',
-                    style: TextStyle(
-                      fontFamily: 'Poppins', // Set font to Poppins
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          setState(() => isLoading = true);
+                          await storeDeviceIdToFirestore();
+                          if (mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BottomNavBar()),
+                            );
+                          }
+                          setState(() => isLoading = false);
+                        },
+                  child: isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : const Text(
+                          'Get Started',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
             ),
