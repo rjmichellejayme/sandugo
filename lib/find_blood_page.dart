@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sandugo/SaveHospitalButton.dart';
+import 'package:sandugo/getDeviceId.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'saved_places_page.dart';
 import 'information_page.dart';
@@ -17,6 +20,154 @@ class FindBloodPage extends StatefulWidget {
 
   @override
   State<FindBloodPage> createState() => _FindBloodPageState();
+}
+
+class ModernDropdown extends StatefulWidget {
+  final String? value;
+  final String hintText;
+  final List<String> items;
+  final Function(String?) onChanged;
+  final String Function(String)? itemBuilder;
+
+  const ModernDropdown({
+    Key? key,
+    this.value,
+    required this.hintText,
+    required this.items,
+    required this.onChanged,
+    this.itemBuilder,
+  }) : super(key: key);
+
+  @override
+  State<ModernDropdown> createState() => _ModernDropdownState();
+}
+
+class _ModernDropdownState extends State<ModernDropdown> {
+  bool isOpen = false;
+  String? hoveredItem;
+
+  void _toggleDropdown() {
+    setState(() {
+      isOpen = !isOpen;
+    });
+  }
+
+  void _selectItem(String? item) {
+    widget.onChanged(item);
+    setState(() {
+      isOpen = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GestureDetector(
+          onTap: _toggleDropdown,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.value != null
+                        ? (widget.itemBuilder?.call(widget.value!) ?? widget.value!)
+                        : widget.hintText,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: widget.value != null
+                          ? const Color(0xFF434343)
+                          : Colors.grey[600],
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: isOpen ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (isOpen)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.items.length,
+              itemBuilder: (context, index) {
+                final item = widget.items[index];
+                final displayText = widget.itemBuilder?.call(item) ?? item;
+                final isSelected = widget.value == item;
+                final isHovered = hoveredItem == item;
+                return MouseRegion(
+                  onEnter: (_) => setState(() => hoveredItem = item),
+                  onExit: (_) => setState(() => hoveredItem = null),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => _selectItem(item),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isHovered
+                            ? const Color(0xFFFF6368)
+                            : isSelected
+                                ? const Color(0xFFF5F5F5) // subtle highlight for selected
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        displayText,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: isHovered
+                              ? Colors.white
+                              : const Color(0xFF434343),
+                          fontSize: 14,
+                          fontWeight: isHovered ? FontWeight.w500 : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class FilteredHospitalsPage extends StatelessWidget {
@@ -124,22 +275,17 @@ class FilteredHospitalsPage extends StatelessWidget {
                             children: [
                               Text(hospital.type),
                               const SizedBox(height: 4),
-                              Text('Open 24 hours',
+                              const Text('Open 24 hours',
                                   style: TextStyle(color: Colors.green)),
                             ],
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.bookmark_border,
-                                    color: Colors.red),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                    if (onShowSavedPlaces != null) {
-                                      onShowSavedPlaces!();
-                                    } 
-                                },
+                              // Saved Places
+                              SaveHospitalButton(
+                                hospital: hospital,
+                                onShowSavedPlaces: onShowSavedPlaces,
                               ),
                               IconButton(
                                 icon: const Icon(Icons.info_outline,
@@ -350,7 +496,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
         allHospitals = snapshot.docs.map((doc) {
           final data = doc.data();
           print('Hospital Data: $data');
-          return Hospital.fromJson(data);
+          return Hospital.fromJson(data, doc.id);
         }).toList();
       });
     } catch (e, stack) {
@@ -594,47 +740,15 @@ class _FindBloodPageState extends State<FindBloodPage> {
           const Text('Select the needed blood type.',
               style: TextStyle(fontSize: 14, color: Colors.black)),
           const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                hintText: 'Choose Blood Type',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
-              dropdownColor: Colors.white, 
-              value: selectedBloodType,
-              onChanged: (value) => setState(() => selectedBloodType = value),
-              items: bloodTypes.map((type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(
-                    type == 'All' ? 'All' : 'Blood Type $type',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: Color(0xFF434343),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
+          ModernDropdown(
+            value: selectedBloodType,
+            hintText: 'Choose Blood Type',
+            items: bloodTypes,
+            onChanged: (value) => setState(() => selectedBloodType = value),
+            itemBuilder: (type) => type == 'All' ? 'All' : 'Blood Type $type',
           ),
           const SizedBox(height: 20),
+
           // Blood Component Section
           const Text('Blood Component',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -642,39 +756,14 @@ class _FindBloodPageState extends State<FindBloodPage> {
           const Text('Select the required blood component.',
               style: TextStyle(fontSize: 14, color: Colors.black)),
           const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                hintText: 'Choose Blood Component',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
-              value: selectedComponent,
-              onChanged: (value) => setState(() => selectedComponent = value),
-              items: bloodComponents.map((component) {
-                return DropdownMenuItem(
-                    value: component, child: Text(component));
-              }).toList(),
-            ),
+          ModernDropdown(
+            value: selectedComponent,
+            hintText: 'Choose Blood Component',
+            items: bloodComponents,
+            onChanged: (value) => setState(() => selectedComponent = value),
           ),
           const SizedBox(height: 30),
+
           Row(
             children: [
               Expanded(
@@ -692,8 +781,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
                       selectedComponent = null;
                     });
                   },
-                  child: const Text('Clear',
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text('Clear', style: TextStyle(color: Colors.white)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -739,14 +827,12 @@ class _FindBloodPageState extends State<FindBloodPage> {
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("No matching facilities found.")),
+                          const SnackBar(content: Text("No matching facilities found.")),
                         );
                       }
                     }
                   },
-                  child: const Text('Apply',
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text('Apply', style: TextStyle(color: Colors.white)),
                 ),
               ),
             ],

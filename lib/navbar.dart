@@ -19,6 +19,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
+  int _selectedIndex = 0; 
   bool _isFirstLoad = true;
   bool _showNearestFacilities = false;
 
@@ -54,16 +55,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
     }
 
     // Load hospitals from assets
-    try {
-      final String response = await rootBundle.loadString('assets/hospitals.json');
-      final List<dynamic> data = jsonDecode(response);
-      setState(() {
-        hospitals = data.map((e) => Hospital.fromJson(e)).toList();
-      });
-    } catch (e) {
-      // Handle error, e.g. show a message or log
-      debugPrint('Error loading hospitals.json: $e');
-    }
+    // try {
+    //   final String response = await rootBundle.loadString('assets/hospitals.json');
+    //   final List<dynamic> data = jsonDecode(response);
+    //   setState(() {
+    //     hospitals = data.map((e) => Hospital.fromJson(e)).toList();
+    //   });
+    // } catch (e) {
+    //   // Handle error, e.g. show a message or log
+    //   debugPrint('Error loading hospitals.json: $e');
+    // }
+  }
+
+  void _onTabSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   //Function to select on List
@@ -94,7 +101,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     Widget bodyContent;
     if (_showNearestFacilities) {
-      bodyContent = const NearestFacilitiesPanel();
+      bodyContent = NearestFacilitiesPanel(
+        onShowSavedPlaces: () {
+          setState(() {
+            _currentIndex = 1; // SavedPlacesPage
+            _isFirstLoad = false;
+            _showNearestFacilities = false;
+          });
+        },
+      );
     } else if (_isFirstLoad) {
       bodyContent = Homepage(
         onFindBloodTap: () {

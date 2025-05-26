@@ -1,8 +1,53 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({Key? key}) : super(key: key);
+
+  Future<String?> getDeviceId() async {
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id;
+    }
+    return null;
+  }
+
+  Future<void> storeDeviceIdToFirestore() async {
+  final prefs = await SharedPreferences.getInstance();
+  final alreadyStored = prefs.getBool('device_id_stored') ?? false;
+
+  if (alreadyStored) {
+    print("Device ID already stored — skipping write.");
+    return;
+  }
+
+  final userCredential = await FirebaseAuth.instance.signInAnonymously();
+  final uid = userCredential.user?.uid;
+  final deviceId = await getDeviceId();
+
+  if (uid != null && deviceId != null) {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'device_id': deviceId,
+        'created_at': FieldValue.serverTimestamp(),
+      });
+
+      await prefs.setBool('device_id_stored', true); // Set the flag
+      print("Device ID stored for UID: $uid");
+    } catch (e) {
+      print("Firestore write error: $e");
+    }
+  } else {
+    print("UID or device ID is null");
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +136,8 @@ class OnboardingPage extends StatelessWidget {
                     ),
                     elevation: 4,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await storeDeviceIdToFirestore();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -116,3 +162,4 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 }
+
