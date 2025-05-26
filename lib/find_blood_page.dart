@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sandugo/SaveHospitalButton.dart';
+import 'package:sandugo/getDeviceId.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'saved_places_page.dart';
 import 'information_page.dart';
@@ -132,15 +135,9 @@ class FilteredHospitalsPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               // Saved Places
-                              IconButton(
-                                icon: const Icon(Icons.bookmark_border,
-                                    color: Colors.red),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                    if (onShowSavedPlaces != null) {
-                                      onShowSavedPlaces!();
-                                    } 
-                                },
+                              SaveHospitalButton(
+                                hospital: hospital,
+                                onShowSavedPlaces: onShowSavedPlaces,
                               ),
                               IconButton(
                                 icon: const Icon(Icons.info_outline,
@@ -351,7 +348,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
         allHospitals = snapshot.docs.map((doc) {
           final data = doc.data();
           print('Hospital Data: $data');
-          return Hospital.fromJson(data);
+          return Hospital.fromJson(data, doc.id);
         }).toList();
       });
     } catch (e, stack) {

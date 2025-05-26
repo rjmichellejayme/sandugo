@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Hospital {
+  final String id;
   final String name;
   final String type;
   final LatLng location;
@@ -11,6 +13,7 @@ class Hospital {
   final String address;
 
   Hospital({
+    required this.id, // Unique identifier for the hospital
     required this.name,
     required this.type,
     required this.location,
@@ -20,9 +23,10 @@ class Hospital {
     required this.address,
   });
 
-  factory Hospital.fromJson(Map<String, dynamic> json) {
+  factory Hospital.fromJson(Map<String, dynamic> json, String id) {
     final GeoPoint geo = json['location'];
     return Hospital(
+      id: id,
       name: json['name'] ?? 'Unknown',
       type: json['type'] ?? 'Unknown',
       location: LatLng(geo.latitude, geo.longitude),
@@ -32,4 +36,23 @@ class Hospital {
       address: json['address'] ?? 'N/A',
     );
   }
+
+// Convert a Hospital instance to a JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'type': type,
+      'location': GeoPoint(location.latitude, location.longitude),
+      'phone': phone,
+      'bloodtype': bloodTypes,
+      'bloodcomponent': bloodComponents,
+      'address': address,
+    };
+  }
+}
+
+Future<void> saveHospitalToUserData(String userId, Hospital hospital) async {
+  final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+  final savedHospitals = userDoc.collection('saved_hospitals');
+  await savedHospitals.doc(hospital.id).set(hospital.toJson());
 }

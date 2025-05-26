@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart' show Geolocator, LocationAccuracy, Position;
+import 'package:latlong2/latlong.dart' show LatLng;
 import 'hospital_data.dart';
 
 class SavedPlacesPage extends StatefulWidget {
@@ -9,11 +13,80 @@ class SavedPlacesPage extends StatefulWidget {
 }
 
 class _SavedPlacesPageState extends State<SavedPlacesPage> {
-  // TODO: Replace with actual saved hospitals from local storage
+  String? userId = FirebaseAuth.instance.currentUser?.uid;
   List<Hospital> savedHospitals = [];
+  Position? currentLocation;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    await _getUserLocation();
+    await _loadHospitals();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> _getUserLocation() async {
+    currentLocation = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+  }
+
+  Future<void> _loadHospitals() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).collection('saved_hospitals').get();
+    final loaded = snapshot.docs.map((doc) {
+      final data = doc.data();
+      return Hospital(
+        id: doc.id, // Use the document ID as the unique identifier
+        name: data['name'],
+        address: data['address'],
+        type: data['type'],
+        location: LatLng(
+          data['location'].latitude,
+          data['location'].longitude,
+        ),
+        phone: data['phone'],
+        bloodTypes: List<String>.from(data['bloodtype']),
+        bloodComponents: List<String>.from(data['bloodcomponent']),
+      );
+    }).toList();
+
+    loaded.sort((a, b) {
+      final distanceA = Geolocator.distanceBetween(
+        currentLocation!.latitude,
+        currentLocation!.longitude,
+        a.location.latitude,
+        a.location.longitude,
+      );
+      final distanceB = Geolocator.distanceBetween(
+        currentLocation!.latitude,
+        currentLocation!.longitude,
+        b.location.latitude,
+        b.location.longitude,
+      );
+      return distanceA.compareTo(distanceB);
+    });
+
+    savedHospitals = loaded;
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        backgroundColor: Color(0xFFFBEAEA),
+        body: Center(
+          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.red),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFFBEAEA),
       body: Column(
