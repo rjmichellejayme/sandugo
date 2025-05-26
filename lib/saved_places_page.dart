@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator, LocationAccuracy, Position;
 import 'package:latlong2/latlong.dart' show LatLng;
+import 'package:sandugo/hospital_details_page.dart' show HospitalDetailsPage;
 import 'hospital_data.dart';
 
 class SavedPlacesPage extends StatefulWidget {
@@ -29,6 +30,20 @@ class _SavedPlacesPageState extends State<SavedPlacesPage> {
     await _loadHospitals();
     setState(() {
       isLoading = false;
+    });
+  }
+
+  Future<void> _deleteHospital(String hospitalId) async {
+    if (userId == null) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('saved_hospitals')
+        .doc(hospitalId)
+        .delete();
+
+    setState(() {
+      savedHospitals.removeWhere((h) => h.id == hospitalId);
     });
   }
 
@@ -162,32 +177,52 @@ class _SavedPlacesPageState extends State<SavedPlacesPage> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            Container(
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.bookmark,
-                                        color: Colors.red),
-                                    onPressed: () {
-                                      // TODO: Implement remove from saved places
-                                    },
-                                  ),
+                                  // VIEW DETAILS BUTTON
                                   IconButton(
                                     icon: const Icon(Icons.info_outline,
                                         color: Colors.red),
                                     onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, '/information');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HospitalDetailsPage(hospital: hospital),
+                                        ),
+                                      );
                                     },
                                   ),
+                                  // DELETION BUTTON
                                   IconButton(
                                     icon: const Icon(Icons.delete_outline,
                                         color: Colors.red),
-                                    onPressed: () {
-                                      // TODO: Implement remove from saved places
+                                    onPressed: () async {
+                                      final confirm = await showDialog<bool>(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Remove Saved Hospital'),
+                                          content: Text('Are you sure you want to remove ${hospital.name}?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context, false),
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context, true),
+                                              child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      if (confirm == true) {
+                                        await _deleteHospital(hospital.id);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text('${hospital.name} removed from saved places')),
+                                        );
+                                      }
                                     },
                                   ),
                                 ],
