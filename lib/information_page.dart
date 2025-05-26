@@ -140,7 +140,7 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color baseColor = Colors.white;
+    const Color baseColor = Colors.white;
     return MouseRegion(
       onEnter: (_) => onHoverChanged(true),
       onExit: (_) => onHoverChanged(false),
@@ -253,16 +253,17 @@ class InfoCard extends StatelessWidget {
             boxShadow: isHovered
                 ? [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.red.withOpacity(0.2),
                       blurRadius: 16,
                       offset: const Offset(0, 8),
                     ),
                   ]
                 : [
-                    BoxShadow(
+                    const BoxShadow(
                       color: Colors.black12,
                       blurRadius: 6,
-                      offset: const Offset(0, 2),
+                      offset: Offset(0, 2),
                     ),
                   ],
             border: isHovered
@@ -314,7 +315,7 @@ class _FAQTileState extends State<FAQTile> {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
+        side: const BorderSide(
           color: Colors.red,
         ),
       ),
