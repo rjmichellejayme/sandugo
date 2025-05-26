@@ -22,6 +22,154 @@ class FindBloodPage extends StatefulWidget {
   State<FindBloodPage> createState() => _FindBloodPageState();
 }
 
+class ModernDropdown extends StatefulWidget {
+  final String? value;
+  final String hintText;
+  final List<String> items;
+  final Function(String?) onChanged;
+  final String Function(String)? itemBuilder;
+
+  const ModernDropdown({
+    Key? key,
+    this.value,
+    required this.hintText,
+    required this.items,
+    required this.onChanged,
+    this.itemBuilder,
+  }) : super(key: key);
+
+  @override
+  State<ModernDropdown> createState() => _ModernDropdownState();
+}
+
+class _ModernDropdownState extends State<ModernDropdown> {
+  bool isOpen = false;
+  String? hoveredItem;
+
+  void _toggleDropdown() {
+    setState(() {
+      isOpen = !isOpen;
+    });
+  }
+
+  void _selectItem(String? item) {
+    widget.onChanged(item);
+    setState(() {
+      isOpen = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GestureDetector(
+          onTap: _toggleDropdown,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.value != null
+                        ? (widget.itemBuilder?.call(widget.value!) ?? widget.value!)
+                        : widget.hintText,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: widget.value != null
+                          ? const Color(0xFF434343)
+                          : Colors.grey[600],
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: isOpen ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (isOpen)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.items.length,
+              itemBuilder: (context, index) {
+                final item = widget.items[index];
+                final displayText = widget.itemBuilder?.call(item) ?? item;
+                final isSelected = widget.value == item;
+                final isHovered = hoveredItem == item;
+                return MouseRegion(
+                  onEnter: (_) => setState(() => hoveredItem = item),
+                  onExit: (_) => setState(() => hoveredItem = null),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => _selectItem(item),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isHovered
+                            ? const Color(0xFFFF6368)
+                            : isSelected
+                                ? const Color(0xFFF5F5F5) // subtle highlight for selected
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        displayText,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: isHovered
+                              ? Colors.white
+                              : const Color(0xFF434343),
+                          fontSize: 14,
+                          fontWeight: isHovered ? FontWeight.w500 : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class FilteredHospitalsPage extends StatelessWidget {
   final VoidCallback? onShowSavedPlaces;
   final List<Hospital> hospitals;
@@ -691,156 +839,6 @@ class _FindBloodPageState extends State<FindBloodPage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-// --- Place this ModernDropdown widget class above your _FindBloodPageState class ---
-
-class ModernDropdown extends StatefulWidget {
-  final String? value;
-  final String hintText;
-  final List<String> items;
-  final Function(String?) onChanged;
-  final String Function(String)? itemBuilder;
-
-  const ModernDropdown({
-    Key? key,
-    this.value,
-    required this.hintText,
-    required this.items,
-    required this.onChanged,
-    this.itemBuilder,
-  }) : super(key: key);
-
-  @override
-  State<ModernDropdown> createState() => _ModernDropdownState();
-}
-
-class _ModernDropdownState extends State<ModernDropdown> {
-  bool isOpen = false;
-  String? hoveredItem;
-
-  void _toggleDropdown() {
-    setState(() {
-      isOpen = !isOpen;
-    });
-  }
-
-  void _selectItem(String? item) {
-    widget.onChanged(item);
-    setState(() {
-      isOpen = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        GestureDetector(
-          onTap: _toggleDropdown,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.value != null
-                        ? (widget.itemBuilder?.call(widget.value!) ?? widget.value!)
-                        : widget.hintText,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: widget.value != null
-                          ? const Color(0xFF434343)
-                          : Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                AnimatedRotation(
-                  turns: isOpen ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (isOpen)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            constraints: const BoxConstraints(maxHeight: 200),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.items.length,
-              itemBuilder: (context, index) {
-                final item = widget.items[index];
-                final displayText = widget.itemBuilder?.call(item) ?? item;
-                final isSelected = widget.value == item;
-                final isHovered = hoveredItem == item;
-                return MouseRegion(
-                  onEnter: (_) => setState(() => hoveredItem = item),
-                  onExit: (_) => setState(() => hoveredItem = null),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () => _selectItem(item),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: isHovered
-                            ? const Color(0xFFFF6368)
-                            : isSelected
-                                ? const Color(0xFFF5F5F5) // subtle highlight for selected
-                                : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        displayText,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: isHovered
-                              ? Colors.white
-                              : const Color(0xFF434343),
-                          fontSize: 14,
-                          fontWeight: isHovered ? FontWeight.w500 : FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-      ],
     );
   }
 }
