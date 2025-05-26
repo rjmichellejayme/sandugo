@@ -105,7 +105,8 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
                       children: [
                         Text(hospital.type),
                         const SizedBox(height: 4),
-                        Text('Open 24 hours', style: TextStyle(color: Colors.green)),
+                        const Text('Open 24 hours',
+                            style: TextStyle(color: Colors.green)),
                       ],
                     ),
                     trailing: Row(
