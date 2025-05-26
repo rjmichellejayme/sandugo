@@ -131,6 +131,7 @@ class FilteredHospitalsPage extends StatelessWidget {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              // Saved Places
                               IconButton(
                                 icon: const Icon(Icons.bookmark_border,
                                     color: Colors.red),
