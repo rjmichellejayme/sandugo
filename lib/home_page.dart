@@ -21,34 +21,36 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9EDEC),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
-        child: Column(
-          children: [
-            _buildHomeButton(
-              index: 0,
-              color: const Color(0xFFD14E52),
-              icon: Icons.opacity,
-              text: 'FIND BLOOD',
-              onTap: widget.onFindBloodTap ?? () {},
-            ),
-            const SizedBox(height: 16),
-            _buildHomeButton(
-              index: 1,
-              color: const Color(0xFFFF7C80),
-              icon: Icons.local_hospital,
-              text: 'NEAREST FACILITIES',
-              onTap: widget.onNearestFacilitiesTap ?? () {},
-            ),
-            const SizedBox(height: 16),
-            _buildHomeButton(
-              index: 2,
-              color: const Color(0xFFFFB2B4),
-              icon: Icons.help_outline,
-              text: 'INFORMATION PAGE',
-              onTap: widget.onInformationPageTap ?? () {},
-            ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+          child: Column(
+            children: [
+              _buildHomeButton(
+                index: 0,
+                color: const Color(0xFFD14E52),
+                icon: Icons.opacity,
+                text: 'FIND BLOOD',
+                onTap: widget.onFindBloodTap ?? () {},
+              ),
+              const SizedBox(height: 16),
+              _buildHomeButton(
+                index: 1,
+                color: const Color(0xFFFF7C80),
+                icon: Icons.local_hospital,
+                text: 'NEAREST FACILITIES',
+                onTap: widget.onNearestFacilitiesTap ?? () {},
+              ),
+              const SizedBox(height: 16),
+              _buildHomeButton(
+                index: 2,
+                color: const Color(0xFFFFB2B4),
+                icon: Icons.help_outline,
+                text: 'INFORMATION PAGE',
+                onTap: widget.onInformationPageTap ?? () {},
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -100,18 +102,24 @@ class _HomepageState extends State<Homepage> {
               Icon(
                 icon,
                 size: iconSize,
-                color: _getIconColor(
-                    index), // Use a helper to set icon color per button
+                color: _getIconColor(index),
               ),
-              Text(
-                text,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  fontSize: textSize,
-                  color: Colors.white,
-                  letterSpacing: 1,
-                ),
+              // Center the text using a Column
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: textSize,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
