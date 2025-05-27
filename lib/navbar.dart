@@ -53,18 +53,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
         currentLocation = LatLng(position.latitude, position.longitude);
       });
     }
-
-    // Load hospitals from assets
-    // try {
-    //   final String response = await rootBundle.loadString('assets/hospitals.json');
-    //   final List<dynamic> data = jsonDecode(response);
-    //   setState(() {
-    //     hospitals = data.map((e) => Hospital.fromJson(e)).toList();
-    //   });
-    // } catch (e) {
-    //   // Handle error, e.g. show a message or log
-    //   debugPrint('Error loading hospitals.json: $e');
-    // }
   }
 
   void _onTabSelected(int index) {
@@ -90,6 +78,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
         onShowSavedPlaces: (){
           setState(() {
             _currentIndex = 1; // SavedPlacesPage
+            _isFirstLoad = false;
+            _showNearestFacilities = false;
+          });
+        },
+        onShowInformationPage: () {
+          setState(() {
+            _currentIndex = 2; // or whatever index your InformationPage is
             _isFirstLoad = false;
             _showNearestFacilities = false;
           });
