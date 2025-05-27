@@ -16,8 +16,13 @@ String capitalizeWords(String input) {
 
 class HospitalDetailsPage extends StatelessWidget {
   final Hospital hospital;
+  final LatLng? userLocation; // <-- Add this
 
-  const HospitalDetailsPage({super.key, required this.hospital});
+  const HospitalDetailsPage({
+    super.key,
+    required this.hospital,
+    this.userLocation, // <-- Add this
+  });
 
   @override
   Widget build(BuildContext context) {
