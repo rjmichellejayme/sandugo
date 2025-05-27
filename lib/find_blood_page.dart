@@ -663,9 +663,32 @@ class _FindBloodPageState extends State<FindBloodPage> {
                 itemCount: filteredHospitals.length,
                 itemBuilder: (context, index) {
                   final hospital = filteredHospitals[index];
+                  double? distanceKm;
+                  if (currentLocation != null) {
+                    final distanceMeters = Geolocator.distanceBetween(
+                      currentLocation!.latitude,
+                      currentLocation!.longitude,
+                      hospital.location.latitude,
+                      hospital.location.longitude,
+                    );
+                    distanceKm = distanceMeters / 1000;
+                  }
                   return ListTile(
                     title: Text(hospital.name),
-                    subtitle: Text(hospital.type),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(hospital.type),
+                        if (distanceKm != null)
+                          Text(
+                            'Distance: ${distanceKm.toStringAsFixed(1)} km',
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 13,
+                            ),
+                          ),
+                      ],
+                    ),
                     onTap: () {
                       setState(() {
                         _selectedHospital = hospital;

@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'sanDUGO',
+      debugShowCheckedModeBanner: false, // <-- Add this line
       theme: ThemeData(
         fontFamily: 'Poppins',
         textTheme: ThemeData.light().textTheme.apply(
