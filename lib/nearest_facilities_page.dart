@@ -11,7 +11,8 @@ import 'package:sandugo/saved_places_page.dart';
 
 class NearestFacilitiesPanel extends StatefulWidget {
   final VoidCallback? onShowSavedPlaces;
-  const NearestFacilitiesPanel({Key? key, this.onShowSavedPlaces}) : super(key: key);
+  final VoidCallback? onShowInformationPage; // Add this line
+  const NearestFacilitiesPanel({Key? key, this.onShowSavedPlaces, this.onShowInformationPage}) : super(key: key);
 
   @override
   State<NearestFacilitiesPanel> createState() => _NearestFacilitiesPageState();
@@ -21,7 +22,6 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
   List<Hospital> allHospitals = [];
   Position? currentLocation;
   bool isLoading = true;
-  Set<String> savingHospitalIds = {};
 
   @override
   void initState() {
@@ -84,6 +84,7 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSaving = false;
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator(strokeWidth: 2, color: Colors.red))
@@ -91,21 +92,22 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
               itemCount: allHospitals.length,
               itemBuilder: (context, index) {
                 final hospital = allHospitals[index];
-                final isSaving = savingHospitalIds.contains(hospital.id);
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ListTile(
-                    leading: const Icon(Icons.local_hospital, color: Colors.red),
+                    leading:
+                        const Icon(Icons.local_hospital, color: Colors.red),
                     title: Text(hospital.name),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(hospital.type),
                         const SizedBox(height: 4),
-                        const Text('Open 24 hours',
+                        Text('Open 24 hours',
                             style: TextStyle(color: Colors.green)),
                       ],
                     ),
@@ -114,49 +116,46 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
                       children: [
                         IconButton(
                           icon: isSaving
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.red),
-                                )
-                              : const Icon(Icons.bookmark_border, color: Colors.red),
+                          ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.red),
+                            )
+                            : const Icon(Icons.bookmark_border, color: Colors.red),
                           onPressed: isSaving
-                              ? null
-                              : () async {
-                                  String? userId = FirebaseAuth.instance.currentUser?.uid;
-                                  if (userId != null) {
-                                    setState(() => savingHospitalIds.add(hospital.id));
-                                    try {
-                                      await saveHospitalToUserData(userId, hospital);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('${hospital.name} Hospital Saved!')),
-                                      );
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Failed to save: $e')),
-                                      );
-                                    } finally {
-                                      setState(() => savingHospitalIds.remove(hospital.id));
-                                    }
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('User not logged in.')),
-                                    );
-                                  }
-                                  if (widget.onShowSavedPlaces != null) {
-                                    widget.onShowSavedPlaces!();
-                                  }
-                                },
+                          ? null
+                          : () async {
+                            String? userId = FirebaseAuth.instance.currentUser?.uid;
+                            if (userId != null) {
+                              setState(() => isSaving = true);
+                              try {
+                                await saveHospitalToUserData(userId, hospital);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('${hospital.name} Hospital Saved!')),
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Failed to save: $e')),
+                                );
+                              } finally {
+                                setState(() => isSaving = false);
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('User not logged in.')),
+                              );
+                            }
+                            if (widget.onShowSavedPlaces != null) {
+                              widget.onShowSavedPlaces!();
+                            }
+                          },
                         ),
                         IconButton(
                           icon: const Icon(Icons.info_outline, color: Colors.red),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const InformationPage(),
-                              ),
-                            );
+                            if (widget.onShowInformationPage != null) {
+                              widget.onShowInformationPage!();
+                            }
                           },
                         ),
                       ],
@@ -165,7 +164,8 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HospitalDetailsPage(hospital: hospital),
+                          builder: (context) =>
+                              HospitalDetailsPage(hospital: hospital),
                         ),
                       );
                     },
