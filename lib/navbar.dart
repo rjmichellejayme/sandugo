@@ -99,7 +99,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
       bodyContent = NearestFacilitiesPanel(
         onShowSavedPlaces: () {
           setState(() {
-            _currentIndex = 1; // SavedPlacesPage
+            _currentIndex = 1; // Saved Places tab
+            _isFirstLoad = false;
+            _showNearestFacilities = false;
+          });
+        },
+        onShowInformationPage: () {
+          setState(() {
+            _currentIndex = 2; // Information tab
             _isFirstLoad = false;
             _showNearestFacilities = false;
           });
