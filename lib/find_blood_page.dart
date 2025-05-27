@@ -16,7 +16,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FindBloodPage extends StatefulWidget {
   final VoidCallback? onShowSavedPlaces;
-  const FindBloodPage({super.key, this.onShowSavedPlaces});
+  final VoidCallback? onShowInformationPage;
+  const FindBloodPage({super.key, this.onShowSavedPlaces, this.onShowInformationPage,});
 
   @override
   State<FindBloodPage> createState() => _FindBloodPageState();
@@ -172,6 +173,7 @@ class _ModernDropdownState extends State<ModernDropdown> {
 
 class FilteredHospitalsPage extends StatelessWidget {
   final VoidCallback? onShowSavedPlaces;
+  final VoidCallback? onShowInformationPage;
   final List<Hospital> hospitals;
   final LatLng userLocation;
 
@@ -180,6 +182,7 @@ class FilteredHospitalsPage extends StatelessWidget {
     required this.hospitals,
     required this.userLocation,
     this.onShowSavedPlaces,
+    this.onShowInformationPage,
   });
 
   @override
@@ -287,21 +290,20 @@ class FilteredHospitalsPage extends StatelessWidget {
                                 hospital: hospital,
                                 onShowSavedPlaces: onShowSavedPlaces,
                               ),
+                              // Information Button
                               IconButton(
                                 icon: const Icon(Icons.info_outline,
                                     color: Colors.red),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const InformationPage(),
-                                    ),
-                                  );
+                                  if (onShowInformationPage != null) {
+                                    Navigator.pop(context);
+                                    onShowInformationPage!();
+                                  }
                                 },
                               ),
                             ],
                           ),
+                          // APPLY BUTTON
                           onTap: () {
                             Navigator.push(
                               context,
@@ -814,6 +816,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
                         return distanceA.compareTo(distanceB);
                       });
 
+                      // Show results in a new page
                       if (sortedHospitals.isNotEmpty) {
                         Navigator.push(
                           context,
@@ -822,6 +825,7 @@ class _FindBloodPageState extends State<FindBloodPage> {
                               hospitals: sortedHospitals,
                               userLocation: currentLocation!,
                               onShowSavedPlaces: widget.onShowSavedPlaces,
+                              onShowInformationPage: widget.onShowInformationPage,
                             ),
                           ),
                         );
