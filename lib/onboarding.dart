@@ -57,13 +57,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xFFF9EDEC),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Container(
+          height: screenHeight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end, // Pushes content to the bottom
             children: [
+              // Top content
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
@@ -127,9 +131,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ],
                 ),
               ),
+              const Spacer(), // Pushes the button to the bottom
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
