@@ -263,6 +263,13 @@ class FilteredHospitalsPage extends StatelessWidget {
                     itemCount: hospitals.length,
                     itemBuilder: (context, index) {
                       final hospital = hospitals[index];
+                      final double distanceMeters = Geolocator.distanceBetween(
+                        userLocation.latitude,
+                        userLocation.longitude,
+                        hospital.location.latitude,
+                        hospital.location.longitude,
+                      );
+                      final double distanceKm = distanceMeters / 1000;
                       return Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
@@ -280,6 +287,14 @@ class FilteredHospitalsPage extends StatelessWidget {
                               const SizedBox(height: 4),
                               const Text('Open 24 hours',
                                   style: TextStyle(color: Colors.green)),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Distance: ${distanceKm.toStringAsFixed(1)} km',
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 13,
+                                ),
+                              ),
                             ],
                           ),
                           trailing: Row(
@@ -308,8 +323,10 @@ class FilteredHospitalsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HospitalDetailsPage(hospital: hospital),
+                                builder: (context) => HospitalDetailsPage(
+                                  hospital: hospital,
+                                  userLocation: userLocation, // <-- Pass this
+                                ),
                               ),
                             );
                           },
