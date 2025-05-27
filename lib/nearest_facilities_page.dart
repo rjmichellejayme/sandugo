@@ -109,6 +109,25 @@ class _NearestFacilitiesPageState extends State<NearestFacilitiesPanel> {
                         const SizedBox(height: 4),
                         Text('Open 24 hours',
                             style: TextStyle(color: Colors.green)),
+                        if (currentLocation != null)
+                          Builder(
+                            builder: (context) {
+                              final distanceMeters = Geolocator.distanceBetween(
+                                currentLocation!.latitude,
+                                currentLocation!.longitude,
+                                hospital.location.latitude,
+                                hospital.location.longitude,
+                              );
+                              final distanceKm = distanceMeters / 1000;
+                              return Text(
+                                'Distance: ${distanceKm.toStringAsFixed(1)} km',
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 13,
+                                ),
+                              );
+                            },
+                          ),
                       ],
                     ),
                     trailing: Row(
